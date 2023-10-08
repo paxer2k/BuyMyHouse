@@ -9,6 +9,6 @@ namespace Domain
         public string? Email { get; set; }
         public double AnualIncome { get; set; }
         public string? PhoneNumber { get; set; }
-        public DateOnly DateOfBirth { get; set; }
+        public string? DateOfBirth { get; set; }
     }
 }

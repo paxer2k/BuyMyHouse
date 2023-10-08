@@ -4,6 +4,7 @@ using DAL.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Service;
 using Service.Interfaces;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,16 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // easy
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Environment.CurrentDirectory)
+    .AddJsonFile("appsettings.json", true, true)
+    .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
+    .AddEnvironmentVariables()
+    .Build();
+
 builder.Services.AddDbContext<BuyMyHouseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
+
+builder.Services.AddSingleton(new AppConfiguration(configuration));
 
 // Add repositories for dependency injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

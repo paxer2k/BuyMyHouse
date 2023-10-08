@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DAL;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
@@ -52,6 +53,6 @@ namespace Service
                 throw new BadRequestException($"Invalid date was entered, please use the following format 'dd-MM-yyyy'");*/
 
             return await _customerRepository.CreateAsync(_mapper.Map<Customer>(customerDTO));
-        }
+        }     
     }
 }

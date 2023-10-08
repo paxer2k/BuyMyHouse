@@ -63,5 +63,20 @@ namespace WebApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("{customerId}")]
+        public async Task<ActionResult<Mortgage>> GetMortgageByCustomerIdAsync(Guid customerId)
+        {
+            try
+            {
+                var mortgage = await _mortgageService.GetMortgageByCustomerIdAsync(customerId);
+
+                return Ok(mortgage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

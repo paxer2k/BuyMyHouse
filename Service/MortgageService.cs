@@ -4,6 +4,7 @@ using Domain;
 using Domain.DTOs;
 using Service.Exceptions;
 using Service.Interfaces;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Service
 {
@@ -51,9 +52,46 @@ namespace Service
             var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.Id == id);
 
             if (mortgage == null)
-                throw new BadRequestException($"The mortage with id {id} does not exist!");
+                throw new BadRequestException($"The mortgage with id {id} does not exist!");
 
             return mortgage;
+        }
+
+        public async Task<Mortgage> GetMortgageByCustomerIdAsync(Guid customerId)
+        {
+            var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.CustomerId == customerId);
+
+            if (mortgage == null)
+                throw new BadRequestException("No mortgage available for this user!");
+
+            if (mortgage.ExpiresAt < DateTime.Now)
+                throw new BadRequestException($"Sorry, the possibility to view this mortage has expired");
+
+            return mortgage;
+        }
+
+        public async Task<bool> HasSentApplication(Guid customerId)
+        {
+            var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.CustomerId == customerId);
+
+            return mortgage != null;
+        }
+
+        public async Task CalculateMortgage()
+        {
+            const double INTEREST_RATE = 4.5;
+
+            var customers = await _customerRepository.GetAllAsync();
+
+            foreach (var customer in customers)
+            {
+                var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.CustomerId == customer.Id);
+
+                if (mortgage == null) // if mortgage was not filled out, ignore, otherwise set mortgage amount
+                    continue;
+
+                mortgage.MortgageAmount += (customer.AnualIncome * INTEREST_RATE);
+            }
         }
     }
 }

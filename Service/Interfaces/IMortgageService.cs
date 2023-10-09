@@ -9,7 +9,7 @@ namespace Service.Interfaces
         Task<IEnumerable<Mortgage>> GetAllMortgagesAsync();
         Task<Mortgage> GetMortgageByIdAsync(Guid id);
         Task<Mortgage> GetMortgageByCustomerIdAsync(Guid customerId);
-        Task<Mortgage> UpdateMortgageAsync(Mortgage mortgage);
+        Task<bool?> UpdateMortgageAsync(Mortgage mortgage);
         Task<bool> IsMortgageSent(Guid customerId);
         Task CalculateMortgageAsync();
     }

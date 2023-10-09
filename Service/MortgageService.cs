@@ -4,7 +4,6 @@ using Domain;
 using Domain.DTOs;
 using Service.Exceptions;
 using Service.Interfaces;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Service
 {

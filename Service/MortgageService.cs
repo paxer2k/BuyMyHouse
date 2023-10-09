@@ -22,8 +22,6 @@ namespace Service
 
         public async Task<Mortgage> CreateMortgageAsync(MortgageDTO mortgageDTO)
         {
-            const double MIN_INCOME = 15000;
-
             if (mortgageDTO == null)
                 throw new BadRequestException("The mortage could not be created.");
 
@@ -32,8 +30,11 @@ namespace Service
             if (customer == null)
                 throw new NotFoundException("The customer with the given id could not be found!");
 
-            if (customer.AnualIncome < MIN_INCOME)
-                throw new BadRequestException("Sorry, you need to earn at least $15,000 per year in order to sign up for a mortgage");
+            if (CalculateAge(customer.DateOfBirth) < 18)
+                throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
+
+            if (customer.AnualIncome < customer.MIN_INCOME)
+                throw new BadRequestException($"Sorry, you need to earn at least ${customer.MIN_INCOME} per year in order to sign up for a mortgage");
 
             return await _mortgageRepository.CreateAsync(_mapper.Map<Mortgage>(mortgageDTO));
         }
@@ -104,6 +105,18 @@ namespace Service
                 throw new BadRequestException("The mortgage does not exist in the database");
 
             return await _mortgageRepository.UpdateAsync(mortgage);
+        }
+
+        private int CalculateAge(DateOnly birthDate)
+        {
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+            int age = currentDate.Year - birthDate.Year;
+
+            if (currentDate.DayOfYear < birthDate.DayOfYear)
+                age--;
+
+            return age;
         }
     }
 }

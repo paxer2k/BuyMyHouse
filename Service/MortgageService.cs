@@ -22,6 +22,7 @@ namespace Service
 
         public async Task<Mortgage> CreateMortgageAsync(MortgageDTO mortgageDTO)
         {
+            const double MIN_INCOME = 15000;
 
             if (mortgageDTO == null)
                 throw new BadRequestException("The mortage could not be created.");
@@ -31,8 +32,8 @@ namespace Service
             if (customer == null)
                 throw new NotFoundException("The customer with the given id could not be found!");
 
-            /*if (mortgageApplicationDTO.AnualIncome <= 0)
-                throw new BadRequestException("Proper anual income has to be added (0 or more)");*/
+            if (customer.AnualIncome < MIN_INCOME)
+                throw new BadRequestException("Sorry, you need to earn at least $15,000 per year in order to sign up for a mortgage");
 
             return await _mortgageRepository.CreateAsync(_mapper.Map<Mortgage>(mortgageDTO));
         }
@@ -70,14 +71,14 @@ namespace Service
             return mortgage;
         }
 
-        public async Task<bool> HasSentApplication(Guid customerId)
+        public async Task<bool> IsMortgageSent(Guid customerId)
         {
             var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.CustomerId == customerId);
 
             return mortgage != null;
         }
 
-        public async Task CalculateMortgage()
+        public async Task CalculateMortgageAsync()
         {
             const double INTEREST_RATE = 4.5;
 
@@ -92,6 +93,17 @@ namespace Service
 
                 mortgage.MortgageAmount += (customer.AnualIncome * INTEREST_RATE);
             }
+        }
+
+        public async Task<bool?> UpdateMortgageAsync(Mortgage mortgage)
+        {
+            if (mortgage == null)
+                throw new BadRequestException("The mortgage object was not initialized...");
+
+            if (string.IsNullOrEmpty(mortgage.Id.ToString()))
+                throw new BadRequestException("The mortgage does not exist in the database");
+
+            return await _mortgageRepository.UpdateAsync(mortgage);
         }
     }
 }

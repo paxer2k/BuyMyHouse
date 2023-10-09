@@ -17,26 +17,26 @@ namespace Service
     public class EmailService : IEmailService
     {
         private readonly IMortgageService _mortgageService;
-        private readonly IRepository<Customer> _customerRepository;
+        private readonly ICustomerService _customerService;
         private readonly AppConfiguration _appConfiguration;
 
-        public EmailService(IMortgageService mortgageService, IRepository<Customer> customerRepository, AppConfiguration appConfiguration)
+        public EmailService(IMortgageService mortgageService, ICustomerService customerService, AppConfiguration appConfiguration)
         {
             _mortgageService = mortgageService;
-            _customerRepository = customerRepository;
+            _customerService = customerService;
             _appConfiguration = appConfiguration;
         }
 
         public async Task SendEmail()
         {
-            var customers = await _customerRepository.GetAllAsync();
+            var customers = await _customerService.GetAllCustomersAsync();
 
             foreach(var customer in customers)
             {
-                if (!await _mortgageService.HasSentApplication(customer.Id))
+                if (!await _mortgageService.IsMortgageSent(customer.Id))
                     continue;
 
-                await GenerateEmail(customer);
+                await GenerateEmail(customer); // only generate an email for those who have sent an application
             }
         }
 
@@ -53,6 +53,12 @@ namespace Service
             string htmlContent = $"Dear {customer.FirstName}, <br><br> The maximum worth of your mortgage can be seen by following this link. This link is available for 24 hours. </n> <a href='http://localhost:7132/api/mortgages/{customer.Id}'>Click Here</a>";
 
             SendGridMessage message = MailHelper.CreateSingleEmail(sender, receiver, subject, plainTextContent, htmlContent);
+
+            // set expiry time for the mortgage
+            var mortgage = await _mortgageService.GetMortgageByCustomerIdAsync(customer.Id);
+            mortgage.ExpiresAt = DateTime.Now.AddHours(24);
+            await _mortgageService.UpdateMortgageAsync(mortgage); // update mortgage
+
             await gridClient.SendEmailAsync(message);
         }
     }

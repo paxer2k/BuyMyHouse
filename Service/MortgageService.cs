@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DAL;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
@@ -12,7 +13,7 @@ namespace Service
         private readonly IRepository<Mortgage> _mortgageRepository;
         private readonly IRepository<Customer> _customerRepository;
         private readonly IMapper _mapper;
-        public MortgageService(IRepository<Mortgage> mortgageRepository, IRepository<Customer> customerRepository, IMapper mapper)
+        public MortgageService(IRepository<Mortgage> mortgageRepository, IRepository<Customer> customerRepository, IMapper mapper, AppConfiguration appConfiguration)
         {
             _mortgageRepository = mortgageRepository;
             _customerRepository = customerRepository;

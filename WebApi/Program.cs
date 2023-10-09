@@ -22,7 +22,7 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-builder.Services.AddDbContext<BuyMyHouseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
+builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
 
 builder.Services.AddSingleton(new AppConfiguration(configuration));
 
@@ -33,6 +33,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IMortgageService, MortgageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

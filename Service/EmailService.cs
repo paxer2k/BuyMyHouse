@@ -46,7 +46,7 @@ namespace Service
             SendGridClient gridClient = new SendGridClient(gridApiKey);
 
             EmailAddress sender = new EmailAddress(_appConfiguration.MailSender, "BuyMyHouse.co");
-            string subject = "Your mortgage application review";
+            string subject = "BuyMyHouse.co | Your mortgage application";
 
             EmailAddress receiver = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
             string plainTextContent = $"Dear Mr/Ms {customer.FirstName}, hereby you can view your mortgage. The following link will be available for the next 24 hours.";

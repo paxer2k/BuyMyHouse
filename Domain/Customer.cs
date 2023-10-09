@@ -6,7 +6,7 @@ namespace Domain
     public class Customer : BaseEntity
     {
         [NotMapped]
-        public double MIN_INCOME { get { return 15000; } } // cannot made const (cannot call in service otherwise)
+        public double MIN_INCOME => 15000; // cannot made const (cannot call in service otherwise)
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }

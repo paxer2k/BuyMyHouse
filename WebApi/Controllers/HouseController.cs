@@ -1,29 +1,28 @@
-using Domain.DTOs;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
 
 namespace WebApi.Controllers
 {
-    [Route("customers")]
+    [Route("houses")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class HouseController : ControllerBase
     {
-        private readonly ICustomerService _customerService;
+        private readonly IHouseService _houseService;
 
-        public UserController(ICustomerService customerService)
+        public HouseController(IHouseService houseService)
         {
-            _customerService = customerService;
+            _houseService = houseService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<House>>> GetAllHouses()
         {
             try
             {
-                var users = await _customerService.GetAllCustomersAsync();
+                var houses = await _houseService.GetAllHouses();
 
-                return Ok(users);
+                return Ok(houses);
             }
             catch (Exception ex)
             {
@@ -32,28 +31,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetUserById(Guid id)
+        public async Task<ActionResult<IEnumerable<Customer>>> GetHouseById(Guid id)
         {
             try
             {
-                var user = await _customerService.GetCustomerByIdAsync(id);
+                var house = await _houseService.GetHouseByIdAsync(id);
 
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Customer>> CreateUser([FromBody] CustomerDTO userDTO)
-        {
-            try
-            {
-                var newUser = await _customerService.CreateCustomer(userDTO);
-
-                return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
+                return Ok(house);
             }
             catch (Exception ex)
             {

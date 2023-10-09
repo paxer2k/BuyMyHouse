@@ -1,16 +1,8 @@
-﻿using AutoMapper;
-using DAL;
-using DAL.Repository.Interfaces;
+﻿using DAL;
 using Domain;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {

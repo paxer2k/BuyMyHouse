@@ -1,28 +1,29 @@
+using Domain.DTOs;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
 
 namespace WebApi.Controllers
 {
-    [Route("houses")]
+    [Route("customers")]
     [ApiController]
-    public class HouseController : ControllerBase
+    public class CustomerController : ControllerBase
     {
-        private readonly IHouseService _houseService;
+        private readonly ICustomerService _customerService;
 
-        public HouseController(IHouseService houseService)
+        public CustomerController(ICustomerService customerService)
         {
-            _houseService = houseService;
+            _customerService = customerService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<House>>> GetAllHouses()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
         {
             try
             {
-                var houses = await _houseService.GetAllHouses();
+                var customers = await _customerService.GetAllCustomersAsync();
 
-                return Ok(houses);
+                return Ok(customers);
             }
             catch (Exception ex)
             {
@@ -31,13 +32,28 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetHouseById(Guid id)
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomerById(Guid id)
         {
             try
             {
-                var house = await _houseService.GetHouseByIdAsync(id);
+                var customer = await _customerService.GetCustomerByIdAsync(id);
 
-                return Ok(house);
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Customer>> CreateUser([FromBody] CustomerDTO userDTO)
+        {
+            try
+            {
+                var newCustomer = await _customerService.CreateCustomer(userDTO);
+
+                return CreatedAtAction(nameof(GetCustomerById), new { id = newCustomer.Id }, newCustomer);
             }
             catch (Exception ex)
             {

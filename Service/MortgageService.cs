@@ -81,8 +81,6 @@ namespace Service
 
         public async Task CalculateMortgageAsync()
         {
-            const double INTEREST_RATE = 4.5;
-
             var customers = await _customerRepository.GetAllAsync();
 
             foreach (var customer in customers)
@@ -92,7 +90,7 @@ namespace Service
                 if (mortgage == null) // if mortgage was not filled out, ignore, otherwise set mortgage amount
                     continue;
 
-                mortgage.MortgageAmount += (customer.AnualIncome * INTEREST_RATE);
+                mortgage.MortgageAmount += (customer.AnualIncome * mortgage.INTEREST_RATE);
             }
         }
 

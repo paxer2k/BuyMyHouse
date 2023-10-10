@@ -41,6 +41,9 @@ namespace WebApi.Controllers
             {
                 var mortgageApplication = await _mortgageService.GetMortgageByIdAsync(id);
 
+                if (mortgageApplication.ExpiresAt < DateTime.Now)
+                    return StatusCode(403, "Sorry, the link has expired.");
+                    
                 return Ok(mortgageApplication);
             }
             catch (Exception ex)
@@ -57,21 +60,6 @@ namespace WebApi.Controllers
                 var newMortgageApplication = await _mortgageService.CreateMortgageAsync(mortgageApplicationDTO);
 
                 return CreatedAtAction(nameof(GetMortgageApplicationById), new { id = newMortgageApplication.Id }, newMortgageApplication);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        [HttpGet("{customerId}")]
-        public async Task<ActionResult<Mortgage>> GetMortgageByCustomerIdAsync(Guid customerId)
-        {
-            try
-            {
-                var mortgage = await _mortgageService.GetMortgageByCustomerIdAsync(customerId);
-
-                return Ok(mortgage);
             }
             catch (Exception ex)
             {

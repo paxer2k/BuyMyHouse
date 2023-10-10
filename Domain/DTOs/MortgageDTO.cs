@@ -2,8 +2,6 @@
 {
     public class MortgageDTO
     {
-        public Guid CustomerId { get; set; }
-        public double MortgageAmount { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public List<Customer> Customers { get; set; }
     }
 }

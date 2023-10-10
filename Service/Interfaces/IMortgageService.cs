@@ -8,9 +8,8 @@ namespace Service.Interfaces
         Task<Mortgage> CreateMortgageAsync(MortgageDTO mortgageDTO);
         Task<IEnumerable<Mortgage>> GetAllMortgagesAsync();
         Task<Mortgage> GetMortgageByIdAsync(Guid id);
-        Task<Mortgage> GetMortgageByCustomerIdAsync(Guid customerId);
+        Task<IEnumerable<Mortgage>> GetAllActiveMortgages();
         Task<bool?> UpdateMortgageAsync(Mortgage mortgage);
-        Task<bool> IsMortgageSent(Guid customerId);
         Task CalculateMortgageAsync();
     }
 }

@@ -7,8 +7,8 @@ namespace DAL
     {
         private readonly AppConfiguration _appConfiguration;
 
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<House> Houses { get; set; }
+/*        public DbSet<Customer> Customers { get; set; }
+        public DbSet<House> Houses { get; set; }*/
         public DbSet<Mortgage> Mortgages { get; set; }
 
         public BuyMyHouseContext(AppConfiguration appConfiguration)
@@ -23,6 +23,33 @@ namespace DAL
                 databaseName: _appConfiguration.CosmosDbName);
 
 
-/*        public BuyMyHouseContext(DbContextOptions<BuyMyHouseContext> options) : base(options) { }
-*/    }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultContainer("Mortgages");
+
+            modelBuilder.Entity<Mortgage>()
+                .ToContainer("Mortgages");
+
+            modelBuilder.Entity<Mortgage>()
+                .HasNoDiscriminator();
+
+            modelBuilder.Entity<Mortgage>()
+                .HasPartitionKey(m => m.PartitionKey);
+
+            modelBuilder.Entity<Mortgage>()
+                .UseETagConcurrency();
+
+/*            modelBuilder.Entity<Mortgage>().OwnsMany(
+                m => m.Customers,
+                sa =>
+                {
+                    sa.ToJsonProperty("Customers");
+                    sa.Property(p => p.Street).ToJsonProperty("ShipsToStreet");
+                    sa.Property(p => p.City).ToJsonProperty("ShipsToCity");
+                });*/
+        }
+
+        /*        public BuyMyHouseContext(DbContextOptions<BuyMyHouseContext> options) : base(options) { }
+        */
+    }
 }

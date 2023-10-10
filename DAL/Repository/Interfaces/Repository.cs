@@ -38,7 +38,12 @@ namespace DAL.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _entities.IgnoreAutoIncludes().ToListAsync();
+            return await _context.Set<T>().IgnoreAutoIncludes().ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAllByConditionAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _entities.Where(predicate).ToListAsync();
         }
 
         public async Task<T> GetByConditionAsync(Expression<Func<T, bool>> predicate)

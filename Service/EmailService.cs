@@ -21,18 +21,18 @@ namespace Service
 
         public async Task SendEmail()
         {
-            var customers = await _customerService.GetAllCustomersAsync();
+            var mortgages = await _mortgageService.GetAllActiveMortgages();
 
-            foreach(var customer in customers)
+            foreach(var mortgage in mortgages)
             {
-                if (!await _mortgageService.IsMortgageSent(customer.Id))
-                    continue;
-
-                await GenerateEmail(customer); // only generate an email for those who have sent an application
+                foreach(var customer in mortgage.Customers)
+                {
+                    await GenerateEmail(customer, mortgage); // only generate an email for those who have sent an application
+                }
             }
         }
 
-        private async Task GenerateEmail(Customer customer)
+        private async Task GenerateEmail(Customer customer, Mortgage activeMortgage)
         {
             string gridApiKey = _appConfiguration.GridApiKey;
             SendGridClient gridClient = new SendGridClient(gridApiKey);
@@ -42,14 +42,12 @@ namespace Service
 
             EmailAddress receiver = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
             string plainTextContent = $"Dear Mr/Ms {customer.FirstName}, hereby you can view your mortgage. The following link will be available for the next 24 hours.";
-            string htmlContent = $"Dear {customer.FirstName}, <br><br> The maximum worth of your mortgage can be seen by following this link. This link is available for 24 hours. </n> <a href='http://localhost:7132/api/mortgages/{customer.Id}'>Click Here</a>";
+            string htmlContent = $"Dear {customer.FirstName}, <br><br> The maximum worth of your mortgage can be seen by following this link. This link is available for 24 hours. </n> <a href='http://localhost:7132/api/mortgages/{activeMortgage.Id}'>Click Here</a>";
 
             SendGridMessage message = MailHelper.CreateSingleEmail(sender, receiver, subject, plainTextContent, htmlContent);
 
-            // set expiry time for the mortgage
-            var mortgage = await _mortgageService.GetMortgageByCustomerIdAsync(customer.Id);
-            mortgage.ExpiresAt = DateTime.Now.AddHours(24);
-            await _mortgageService.UpdateMortgageAsync(mortgage); // update mortgage
+            activeMortgage.ExpiresAt = DateTime.Now.AddHours(24);
+            await _mortgageService.UpdateMortgageAsync(activeMortgage); // update mortgage
 
             await gridClient.SendEmailAsync(message);
         }

@@ -8,6 +8,7 @@ namespace DAL.Repository.Interfaces
         Task<T> CreateAsync(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByConditionAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAllByConditionAsync(Expression<Func<T, bool>> predicate);
         Task<bool?> UpdateAsync(T entity);
         Task<bool> DeleteAsync(Guid id);
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DAL;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
@@ -12,11 +13,13 @@ namespace Service
         private readonly IRepository<Mortgage> _mortgageRepository;
         private readonly IRepository<Customer> _customerRepository;
         private readonly IMapper _mapper;
-        public MortgageService(IRepository<Mortgage> mortgageRepository, IRepository<Customer> customerRepository, IMapper mapper)
+        private readonly AppConfiguration _appConfiguration;
+        public MortgageService(IRepository<Mortgage> mortgageRepository, IRepository<Customer> customerRepository, IMapper mapper, AppConfiguration appConfiguration)
         {
             _mortgageRepository = mortgageRepository;
             _customerRepository = customerRepository;
             _mapper = mapper;
+            _appConfiguration = appConfiguration;
         }
 
         public async Task<Mortgage> CreateMortgageAsync(MortgageDTO mortgageDTO)
@@ -36,11 +39,11 @@ namespace Service
 
             foreach (var customer in mortgageDTO.Customers)
             {
-                if (CalculateAge(customer.DateOfBirth) < 18)
+                if (CalculateAge(customer.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
                     throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
 
-                if (customer.AnualIncome < customer.MIN_INCOME)
-                    throw new BadRequestException($"Sorry, you need to earn at least ${customer.MIN_INCOME} per year in order to sign up for a mortgage");
+                if (customer.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
+                    throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
 
                 Customer newCustomer = new Customer
                 {
@@ -76,24 +79,24 @@ namespace Service
             if (mortgage == null)
                 throw new BadRequestException($"The mortgage with id {id} does not exist!");
 
+            if (mortgage.ExpiresAt < DateTime.Now)
+                throw new ForbiddenException("The time for viewing this mortgage application has expired!");
+
             return mortgage;
         }
 
         public async Task CalculateMortgageAsync()
         {
-            const double INTEREST_RATE = 4.5;
-
             var mortgagesOfToday = await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today);
 
             foreach (var mortgage in mortgagesOfToday)
             {
                 var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
 
-                mortgage.MortgageAmount += (totalIncome * INTEREST_RATE);
+                mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
 
                 await _mortgageRepository.UpdateAsync(mortgage);
             }
-
         }
 
         public async Task<bool?> UpdateMortgageAsync(Mortgage mortgage)

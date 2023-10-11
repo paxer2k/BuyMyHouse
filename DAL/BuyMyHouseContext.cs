@@ -18,9 +18,9 @@ namespace DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseCosmos(
-                accountEndpoint: _appConfiguration.CosmosUrl,
-                accountKey: _appConfiguration.CosmosPrimaryKey,
-                databaseName: _appConfiguration.CosmosDbName);
+                accountEndpoint: _appConfiguration.CosmosConfig.CosmosUrl!,
+                accountKey: _appConfiguration.CosmosConfig.CosmosPrimaryKey!,
+                databaseName: _appConfiguration.CosmosConfig.CosmosDbName!);
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

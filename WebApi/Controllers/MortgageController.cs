@@ -40,9 +40,6 @@ namespace WebApi.Controllers
             try
             {
                 var mortgageApplication = await _mortgageService.GetMortgageByIdAsync(id);
-
-                if (mortgageApplication.ExpiresAt < DateTime.Now)
-                    return StatusCode(403, "Sorry, the link has expired.");
                     
                 return Ok(mortgageApplication);
             }

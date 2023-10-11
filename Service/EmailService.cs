@@ -34,15 +34,15 @@ namespace Service
 
         private async Task GenerateEmail(Customer customer, Mortgage activeMortgage)
         {
-            string gridApiKey = _appConfiguration.GridApiKey;
+            string gridApiKey = _appConfiguration.MailerConfig.GridApiKey;
             SendGridClient gridClient = new SendGridClient(gridApiKey);
 
-            EmailAddress sender = new EmailAddress(_appConfiguration.MailSender, "BuyMyHouse.co");
+            EmailAddress sender = new EmailAddress(_appConfiguration.MailerConfig.MailSender, "BuyMyHouse.co");
             string subject = "BuyMyHouse.co | Your mortgage application";
 
             EmailAddress receiver = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
             string plainTextContent = $"Dear Mr/Ms {customer.FirstName}, hereby you can view your mortgage. The following link will be available for the next 24 hours.";
-            string htmlContent = $"Dear {customer.FirstName}, <br><br> The maximum worth of your mortgage can be seen by following this link. This link is available for 24 hours. </n> <a href='http://localhost:7132/api/mortgages/{activeMortgage.Id}'>Click Here</a>";
+            string htmlContent = $"Dear {customer.FirstName}, <br><br> The mortgage application can be viewed under the following link. This link is available for the next 24 hours. </n> <a href='http://localhost:7132/api/mortgages/{activeMortgage.Id}'>Click Here</a>";
 
             SendGridMessage message = MailHelper.CreateSingleEmail(sender, receiver, subject, plainTextContent, htmlContent);
 

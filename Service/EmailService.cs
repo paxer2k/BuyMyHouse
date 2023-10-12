@@ -1,4 +1,4 @@
-﻿using DAL;
+﻿using DAL.Repository.Interfaces;
 using Domain;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -10,9 +10,9 @@ namespace Service
     {
         private readonly IMortgageService _mortgageService;
         private readonly ICustomerService _customerService;
-        private readonly AppConfiguration _appConfiguration;
+        private readonly IAppConfiguration _appConfiguration;
 
-        public EmailService(IMortgageService mortgageService, ICustomerService customerService, AppConfiguration appConfiguration)
+        public EmailService(IMortgageService mortgageService, ICustomerService customerService, IAppConfiguration appConfiguration)
         {
             _mortgageService = mortgageService;
             _customerService = customerService;

@@ -24,7 +24,7 @@ var configuration = new ConfigurationBuilder()
 
 builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
 
-builder.Services.AddSingleton(new AppConfiguration(configuration));
+builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configuration));
 
 // Add repositories for dependency injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

@@ -1,17 +1,18 @@
-﻿using Domain;
+﻿using DAL.Repository.Interfaces;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
     public class BuyMyHouseContext : DbContext
     {
-        private readonly AppConfiguration _appConfiguration;
+        private readonly IAppConfiguration _appConfiguration;
 
 /*        public DbSet<Customer> Customers { get; set; }
         public DbSet<House> Houses { get; set; }*/
         public DbSet<Mortgage> Mortgages { get; set; }
 
-        public BuyMyHouseContext(AppConfiguration appConfiguration)
+        public BuyMyHouseContext(IAppConfiguration appConfiguration)
         {
             _appConfiguration = appConfiguration;
         }
@@ -21,7 +22,6 @@ namespace DAL
                 accountEndpoint: _appConfiguration.CosmosConfig.CosmosUrl!,
                 accountKey: _appConfiguration.CosmosConfig.CosmosPrimaryKey!,
                 databaseName: _appConfiguration.CosmosConfig.CosmosDbName!);
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -50,13 +50,13 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Mortgage>> CreateMortgageApplication([FromBody] MortgageDTO mortgageApplicationDTO)
+        public async Task<ActionResult<MortgageDTO>> CreateMortgageApplication([FromBody] MortgageDTO mortgageApplicationDTO)
         {
             try
             {
-                var newMortgageApplication = await _mortgageService.CreateMortgageAsync(mortgageApplicationDTO);
+                var newMortgage = await _mortgageService.CreateMortgageAsync(mortgageApplicationDTO);
 
-                return CreatedAtAction(nameof(GetMortgageApplicationById), new { id = newMortgageApplication.Id }, newMortgageApplication);
+                return Ok(newMortgage);
             }
             catch (Exception ex)
             {

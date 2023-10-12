@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using DAL.Repository.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
 namespace DAL
 {
-    public class AppConfiguration
+    public class AppConfiguration : IAppConfiguration
     {
         public MailerConfig MailerConfig { get; set; }
         public CosmosConfig CosmosConfig { get; set; }

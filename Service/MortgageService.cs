@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DAL;
+using DAL.Repository;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
@@ -11,25 +11,25 @@ namespace Service
     public class MortgageService : IMortgageService
     {
         private readonly IRepository<Mortgage> _mortgageRepository;
-        private readonly IRepository<Customer> _customerRepository;
         private readonly IMapper _mapper;
-        private readonly AppConfiguration _appConfiguration;
-        public MortgageService(IRepository<Mortgage> mortgageRepository, IRepository<Customer> customerRepository, IMapper mapper, AppConfiguration appConfiguration)
+        private readonly IAppConfiguration _appConfiguration;
+        public MortgageService(IRepository<Mortgage> mortgageRepository, IMapper mapper, IAppConfiguration appConfiguration)
         {
             _mortgageRepository = mortgageRepository;
-            _customerRepository = customerRepository;
             _mapper = mapper;
             _appConfiguration = appConfiguration;
         }
 
-        public async Task<Mortgage> CreateMortgageAsync(MortgageDTO mortgageDTO)
+        public async Task<MortgageDTO> CreateMortgageAsync(MortgageDTO mortgageDTO)
         {
             if (mortgageDTO == null)
                 throw new BadRequestException("The mortage could not be created.");
 
             if (mortgageDTO.Customers == null || mortgageDTO.Customers.Count <= 0)
-                throw new BadRequestException("Oh nonononono");
+                throw new BadRequestException("You are required to fill out the customer(s) details");
 
+            if (mortgageDTO.Customers.Count > 2)
+                throw new BadRequestException("You are not allowed to have more than 2 customers for a mortgage.");
 
             Mortgage newMortgage = new Mortgage()
             {
@@ -59,7 +59,9 @@ namespace Service
                 newMortgage.Customers.Add(newCustomer);
             }
 
-            return await _mortgageRepository.CreateAsync(newMortgage);
+            await _mortgageRepository.CreateAsync(newMortgage);
+
+            return _mapper.Map<MortgageDTO>(newMortgage);
         }
 
         public async Task<IEnumerable<Mortgage>> GetAllMortgagesAsync()

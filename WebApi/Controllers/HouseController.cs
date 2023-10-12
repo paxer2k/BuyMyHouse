@@ -13,6 +13,7 @@ namespace WebApi.Controllers
         public HouseController(IHouseService houseService)
         {
             _houseService = houseService;
+            //
         }
 
         [HttpGet]

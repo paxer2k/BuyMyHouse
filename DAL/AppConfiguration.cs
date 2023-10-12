@@ -1,4 +1,4 @@
-﻿using DAL.Repository.Interfaces;
+﻿using DAL.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
 

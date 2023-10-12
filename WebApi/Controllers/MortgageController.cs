@@ -10,12 +10,10 @@ namespace WebApi.Controllers
     public class MortgageController : ControllerBase
     {
         private readonly IMortgageService _mortgageService;
-        private readonly ICustomerService _customerService;
 
-        public MortgageController(IMortgageService mortgageService, ICustomerService customerService)
+        public MortgageController(IMortgageService mortgageService)
         {
             _mortgageService = mortgageService;
-            _customerService = customerService;
         }
 
         [HttpGet]
@@ -33,7 +31,6 @@ namespace WebApi.Controllers
             }
         }
 
-        // GET: /customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Mortgage>> GetMortgageApplicationById(Guid id)
         {

@@ -10,6 +10,5 @@ namespace Service.Interfaces
         Task<Mortgage> GetMortgageByIdAsync(Guid id);
         Task<IEnumerable<Mortgage>> GetAllActiveMortgages();
         Task<bool?> UpdateMortgageAsync(Mortgage mortgage);
-        Task CalculateMortgageAsync();
     }
 }

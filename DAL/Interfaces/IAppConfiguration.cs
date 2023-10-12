@@ -1,4 +1,4 @@
-﻿namespace DAL.Repository.Interfaces
+﻿namespace DAL.Interfaces
 {
     public interface IAppConfiguration
     {

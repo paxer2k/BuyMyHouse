@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using DAL.Interfaces;
 using DAL.Repository;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
 using Service.Exceptions;
+using Service.Helpers;
 using Service.Interfaces;
 
 namespace Service
@@ -39,7 +41,7 @@ namespace Service
 
             foreach (var customer in mortgageDTO.Customers)
             {
-                if (CalculateAge(customer.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
+                if (MortgageHelper.CalculateAge(customer.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
                     throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
 
                 if (customer.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
@@ -87,20 +89,12 @@ namespace Service
             return mortgage;
         }
 
-        public async Task CalculateMortgageAsync()
-        {
-            var mortgagesOfToday = await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today);
-
-            foreach (var mortgage in mortgagesOfToday)
-            {
-                var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
-
-                mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
-
-                await _mortgageRepository.UpdateAsync(mortgage);
-            }
-        }
-
+        /// <summary>
+        /// Function responsible for updating any field within the mortgage object in the database (e.g mortgage amount, expiry date, etc..)
+        /// </summary>
+        /// <param name="mortgage"></param>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
         public async Task<bool?> UpdateMortgageAsync(Mortgage mortgage)
         {
             if (mortgage == null)
@@ -112,21 +106,11 @@ namespace Service
             return await _mortgageRepository.UpdateAsync(mortgage);
         }
 
+
+
         public async Task<IEnumerable<Mortgage>> GetAllActiveMortgages()
         {
             return await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today.AddHours(-24)); // this action will happen on next day
-        }
-
-        private int CalculateAge(DateOnly birthDate)
-        {
-            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-
-            int age = currentDate.Year - birthDate.Year;
-
-            if (currentDate.DayOfYear < birthDate.DayOfYear)
-                age--;
-
-            return age;
         }
     }
 }

@@ -18,8 +18,15 @@ namespace CalcuateMortgageFunction
         [Function("CalculateMortgagesTimer")]
         public async Task Run([TimerTrigger("59 23 * * *")] Timer timer) // at 11:59:59 PM EACH DAY
         {
-            _logger.LogInformation($"Calculating mortgages for all applications...");
-            await _mortgageCalculatorService.CalculateMortgagesAsync();
+            try
+            {
+                _logger.LogInformation($"Calculating mortgages for all applications...");
+                await _mortgageCalculatorService.CalculateMortgagesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong while calculating mortgages: {ex.Message}");
+            }
         }
     }
 }

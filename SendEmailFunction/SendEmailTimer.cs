@@ -18,8 +18,15 @@ namespace SendEmailFunction
         [Function("SendEmailTimer")]
         public async Task Run([TimerTrigger("0 7 * * *")] Timer timer) // 7AM everyday
         {
-            _logger.LogInformation($"Sending email to add users who made an application...");
-            await _emailService.SendEmail();
+            try
+            {
+                _logger.LogInformation("Sending mails to all customers");
+                await _emailService.SendEmails();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong while sending the emails: {ex.Message}");
+            }
         }
     }
 }

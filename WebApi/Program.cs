@@ -1,8 +1,10 @@
 using DAL;
-using DAL.Interfaces;
+using DAL.Configuration;
+using DAL.Configuration.Interfaces;
 using DAL.Repository;
 using DAL.Repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using DAL.Seeder;
+using DAL.Seeder.Interfaces;
 using Service;
 using Service.Interfaces;
 using System.Reflection;
@@ -35,8 +37,17 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IMortgageService, MortgageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 
 var app = builder.Build();
+
+// seed if no data exists...
+using (var scope = app.Services.CreateScope())
+{
+    var dataSeeder = scope.ServiceProvider.GetRequiredService<ICosmosDataSeeder>();
+
+    dataSeeder.SeedData();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

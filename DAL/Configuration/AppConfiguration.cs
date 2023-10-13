@@ -1,16 +1,16 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Configuration.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
-namespace DAL
+namespace DAL.Configuration
 {
     public class AppConfiguration : IAppConfiguration
     {
         public MailerConfig MailerConfig { get; set; }
         public CosmosConfig CosmosConfig { get; set; }
         public BusinessLogicConfig BusinessLogicConfig { get; set; }
-        
-        public AppConfiguration(IConfiguration configuration) 
+
+        public AppConfiguration(IConfiguration configuration)
         {
             MailerConfig = new MailerConfig
             {

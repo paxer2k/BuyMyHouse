@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using DAL.Interfaces;
-using DAL.Repository;
+using DAL.Configuration.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;

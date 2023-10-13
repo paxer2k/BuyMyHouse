@@ -1,4 +1,4 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Configuration.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain;
 using Service.Interfaces;

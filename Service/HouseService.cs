@@ -3,7 +3,6 @@ using DAL.Repository.Interfaces;
 using Domain;
 using Service.Exceptions;
 using Service.Interfaces;
-using System.Runtime.CompilerServices;
 
 namespace Service
 {

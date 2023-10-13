@@ -1,4 +1,4 @@
-﻿using DAL.Interfaces;
+﻿using DAL.Configuration.Interfaces;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,31 +25,26 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultContainer("Mortgages");
+            modelBuilder.HasDefaultContainer("Mortgages"); // tf am i supposed to do with this
 
+            // Configuring mortgage entity
             modelBuilder.Entity<Mortgage>()
-                .ToContainer("Mortgages");
-
-            modelBuilder.Entity<Mortgage>()
-                .HasNoDiscriminator();
-
-            modelBuilder.Entity<Mortgage>()
-                .HasPartitionKey(m => m.PartitionKey);
-
-            modelBuilder.Entity<Mortgage>()
+                .ToContainer("Mortgages")
+                .HasNoDiscriminator()
+                .HasPartitionKey(m => m.PartitionKey)
                 .UseETagConcurrency();
 
-/*            modelBuilder.Entity<Mortgage>().OwnsMany(
-                m => m.Customers,
-                sa =>
+            modelBuilder.Entity<Mortgage>()
+                .OwnsMany(m => m.Customers, sa =>
                 {
-                    sa.ToJsonProperty("Customers");
-                    sa.Property(p => p.Street).ToJsonProperty("ShipsToStreet");
-                    sa.Property(p => p.City).ToJsonProperty("ShipsToCity");
-                });*/
+                    sa.ToJsonProperty("Customers"); // idk if this is needed
+                    sa.Property(c => c.FirstName).ToJsonProperty("FirstName");
+                    sa.Property(c => c.LastName).ToJsonProperty("LastName");
+                    sa.Property(c => c.Email).ToJsonProperty("Email");
+                    sa.Property(c => c.DateOfBirth).ToJsonProperty("DateOfBirth");
+                    sa.Property(c => c.AnualIncome).ToJsonProperty("AnualIncome");
+                    sa.Property(c => c.PhoneNumber).ToJsonProperty("PhoneNumber");
+                });
         }
-
-        /*        public BuyMyHouseContext(DbContextOptions<BuyMyHouseContext> options) : base(options) { }
-        */
     }
 }

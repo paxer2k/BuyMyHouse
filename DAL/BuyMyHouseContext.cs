@@ -1,15 +1,13 @@
 ﻿using DAL.Configuration.Interfaces;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace DAL
 {
     public class BuyMyHouseContext : DbContext
     {
         private readonly IAppConfiguration _appConfiguration;
-
-/*        public DbSet<Customer> Customers { get; set; }
-        public DbSet<House> Houses { get; set; }*/
         public DbSet<Mortgage> Mortgages { get; set; }
 
         public BuyMyHouseContext(IAppConfiguration appConfiguration)
@@ -25,7 +23,7 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultContainer("Mortgages"); // tf am i supposed to do with this
+            modelBuilder.HasDefaultContainer("MortgageApplications"); // tf am i supposed to do with this
 
             // Configuring mortgage entity
             modelBuilder.Entity<Mortgage>()

@@ -13,7 +13,7 @@ namespace DAL.Seeder
 
         public void SeedData()
         {
-            if (!_context.Mortgages.AsEnumerable().Any())
+            if (!_context.Mortgages.Any())
             {
                 var customer1 = new Customer
                 {

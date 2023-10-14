@@ -41,8 +41,8 @@ namespace DAL.Configuration
     public class CosmosConfig
     {
         public string CosmosUrl { get; internal set; } = string.Empty;
-        public string? CosmosPrimaryKey { get; internal set; } = string.Empty;
-        public string? CosmosDbName { get; internal set; } = string.Empty; 
+        public string CosmosPrimaryKey { get; internal set; } = string.Empty;
+        public string CosmosDbName { get; internal set; } = string.Empty; 
     }
 
     public class BusinessLogicConfig

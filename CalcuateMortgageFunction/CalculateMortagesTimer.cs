@@ -16,7 +16,7 @@ namespace CalcuateMortgageFunction
         }
 
         [Function("CalculateMortgagesTimer")]
-        public async Task Run([TimerTrigger("59 23 * * *")] Timer timer) // at 11:59:59 PM EACH DAY
+        public async Task Run([TimerTrigger("* * * * *")] MyInfo myInfo) // at 11:59:59 PM EACH DAY | 59 23 * * *
         {
             try
             {
@@ -27,6 +27,19 @@ namespace CalcuateMortgageFunction
             {
                 _logger.LogError($"Something went wrong while calculating mortgages: {ex.Message}");
             }
+        }
+
+        public class MyInfo
+        {
+            public MyScheduleStatus ScheduleStatus { get; set; }
+            public bool IsPastDue { get; set; }
+        }
+
+        public class MyScheduleStatus
+        {
+            public DateTime Last { get; set; }
+            public DateTime Next { get; set; }
+            public DateTime LastUpdated { get; set; }
         }
     }
 }

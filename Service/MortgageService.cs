@@ -13,12 +13,10 @@ namespace Service
     public class MortgageService : IMortgageService
     {
         private readonly IRepository<Mortgage> _mortgageRepository;
-        private readonly IMapper _mapper;
         private readonly IAppConfiguration _appConfiguration;
-        public MortgageService(IRepository<Mortgage> mortgageRepository, IMapper mapper, IAppConfiguration appConfiguration)
+        public MortgageService(IRepository<Mortgage> mortgageRepository, IAppConfiguration appConfiguration)
         {
             _mortgageRepository = mortgageRepository;
-            _mapper = mapper;
             _appConfiguration = appConfiguration;
         }
 
@@ -26,10 +24,7 @@ namespace Service
         {
             ValidateMortgageDTO(mortgageDTO);
 
-            Mortgage newMortgage = new Mortgage
-            {
-                Customers = new List<Customer>()       
-            };
+            Mortgage newMortgage = new Mortgage();
 
             foreach (var customer in mortgageDTO.Customers)
             {
@@ -42,7 +37,6 @@ namespace Service
                     Email = customer.Email,
                     DateOfBirth = customer.DateOfBirth.ToString("yyyy-MM-dd"),
                     AnualIncome = customer.AnualIncome,
-                    PhoneNumber = customer.PhoneNumber,
                 };
 
                 newMortgage.Customers.Add(newCustomer);

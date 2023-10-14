@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{64F3B05A-7320-4819-BC32-3161171D7713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcuateMortgageFunction", "CalcuateMortgageFunction\CalcuateMortgageFunction.csproj", "{58DE3FEC-BFAB-4C4F-A0F6-30F52FB46EF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalcuateMortgageFunction", "CalcuateMortgageFunction\CalcuateMortgageFunction.csproj", "{58DE3FEC-BFAB-4C4F-A0F6-30F52FB46EF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendEmailFunction", "SendEmailFunction\SendEmailFunction.csproj", "{69095A91-BFD7-4F18-90D9-0BF9FCC9584B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailFunction", "SendEmailFunction\SendEmailFunction.csproj", "{69095A91-BFD7-4F18-90D9-0BF9FCC9584B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,7 +16,7 @@ namespace SendEmailFunction
         }
 
         [Function("SendEmailTimer")]
-        public async Task Run([TimerTrigger("0 7 * * *")] Timer timer) // 7AM everyday
+        public async Task Run([TimerTrigger("* * * * *")] MyInfo myInfo) // 7AM everyday 0 7 * * *
         {
             try
             {
@@ -27,6 +27,19 @@ namespace SendEmailFunction
             {
                 _logger.LogError($"Something went wrong while sending the emails: {ex.Message}");
             }
+        }
+
+        public class MyInfo
+        {
+            public MyScheduleStatus ScheduleStatus { get; set; }
+            public bool IsPastDue { get; set; }
+        }
+
+        public class MyScheduleStatus
+        {
+            public DateTime Last { get; set; }
+            public DateTime Next { get; set; }
+            public DateTime LastUpdated { get; set; }
         }
     }
 }

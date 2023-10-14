@@ -48,7 +48,7 @@ using (var scope = app.Services.CreateScope())
 
     var dataSeeder = scope.ServiceProvider.GetRequiredService<ICosmosDataSeeder>();
 
-    dataSeeder.SeedData();
+    await dataSeeder.SeedDataAsync();
 }
 
 // Configure the HTTP request pipeline.

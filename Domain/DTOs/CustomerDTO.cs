@@ -1,24 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Domain.DTOs
+﻿namespace Domain.DTOs
 {
     public class CustomerDTO
     {
-        [JsonRequired]
-        public string? FirstName { get; set; }
-
-        [JsonRequired]
-        public string? LastName { get; set; }
-
-        [JsonRequired]
-        public string? Email { get; set; }
-
-        [JsonRequired]
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public double AnualIncome { get; set; }
-
-        public string? PhoneNumber { get; set; }
-
-        [JsonRequired]
         public DateOnly DateOfBirth { get; set; }
     }
 }

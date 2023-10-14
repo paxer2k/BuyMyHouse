@@ -19,7 +19,7 @@ namespace Service
 
         public async Task SendEmails()
         {
-            var mortgages = await _mortgageService.GetActiveMortgagesOfYesterday(); // CHANGE THIS BACK LATER
+            var mortgages = await _mortgageService.GetMortgagesOfToday(); // CHANGE THIS BACK LATER GetActiveMortgagesOfYesterday();
 
             foreach (var mortgage in mortgages)
             {
@@ -35,7 +35,7 @@ namespace Service
             string gridApiKey = _appConfiguration.MailerConfig.GridApiKey!;
             SendGridClient gridClient = new SendGridClient(gridApiKey);
 
-            EmailAddress sender = new EmailAddress(_appConfiguration.MailerConfig.MailSender, "BuyMyHouse.co"); 
+            EmailAddress sender = new EmailAddress(_appConfiguration.MailerConfig.MailSender, "BuyMyHouse.co");
             string subject = "BuyMyHouse.co | Your mortgage application";
 
             EmailAddress receiver = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");

@@ -1,19 +1,20 @@
-﻿using DAL.Seeder.Interfaces;
+﻿using DAL.Repository.Interfaces;
+using DAL.Seeder.Interfaces;
 using Domain;
 
 namespace DAL.Seeder
 {
     public class CosmosDataSeeder : ICosmosDataSeeder
     {
-        private readonly BuyMyHouseContext _context;
-        public CosmosDataSeeder(BuyMyHouseContext context)
+        private readonly IRepository<Mortgage> _mortgageRepository;
+        public CosmosDataSeeder(IRepository<Mortgage> mortgageRepository)
         {
-            _context = context; 
+            _mortgageRepository = mortgageRepository; 
         }
 
-        public void SeedData()
+        public async Task SeedDataAsync()
         {
-            if (!_context.Mortgages.AsEnumerable().Any())
+            if (!(await _mortgageRepository.GetAllAsync()).Any())
             {
                 var customer1 = new Customer
                 {
@@ -21,7 +22,6 @@ namespace DAL.Seeder
                     LastName = "Doe",
                     Email = "john@example.com",
                     AnualIncome = 75000,
-                    PhoneNumber = "123-456-7890",
                     DateOfBirth = new DateOnly(1985, 3, 15).ToString("yyyy-MM-dd")
                 };
 
@@ -31,7 +31,6 @@ namespace DAL.Seeder
                     LastName = "Smith",
                     Email = "jane@example.com",
                     AnualIncome = 80000,
-                    PhoneNumber = "987-654-3210",
                     DateOfBirth = new DateOnly(1988, 7, 20).ToString("yyyy-MM-dd")
                 };
 
@@ -41,7 +40,6 @@ namespace DAL.Seeder
                     LastName = "Johnson",
                     Email = "alice@example.com",
                     AnualIncome = 90000,
-                    PhoneNumber = "111-222-3333",
                     DateOfBirth = new DateOnly(1990, 5, 10).ToString("yyyy-MM-dd")
                 };
 
@@ -51,30 +49,22 @@ namespace DAL.Seeder
                     LastName = "Arkhipov",
                     Email = "alex.arkhipov.7590@gmail.com",
                     AnualIncome = 85000,
-                    PhoneNumber = "555-666-7777",
                     DateOfBirth = new DateOnly(1987, 9, 25).ToString("yyyy-MM-dd")
                 };
 
-                var mortgage1 = new Mortgage
-                {
-                    Customers = new List<Customer> { customer1, customer2 }
-                };
+                var mortgage1 = new Mortgage();
+                mortgage1.Customers.Add(customer1);
+                mortgage1.Customers.Add(customer2);
 
-                var mortgage2 = new Mortgage
-                {
-                    Customers = new List<Customer> { customer3 },
-                };
+                var mortgage2 = new Mortgage();
+                mortgage2.Customers.Add(customer3);
 
-                var mortgage3 = new Mortgage
-                {
-                    Customers = new List<Customer> { customer4 },
-                };
+                var mortgage3 = new Mortgage();
+                mortgage3.Customers.Add(customer4);
 
-                _context.Mortgages.Add(mortgage1);
-                _context.Mortgages.Add(mortgage2);
-                _context.Mortgages.Add(mortgage3);
-
-                _context.SaveChanges();
+                await _mortgageRepository.CreateAsync(mortgage1);
+                await _mortgageRepository.CreateAsync(mortgage2);
+                await _mortgageRepository.CreateAsync(mortgage3);
             }
         }
     }

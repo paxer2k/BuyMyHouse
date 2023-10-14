@@ -2,6 +2,6 @@
 {
     public interface ICosmosDataSeeder
     {
-        void SeedData();
+        Task SeedDataAsync();
     }
 }

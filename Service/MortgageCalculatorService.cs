@@ -1,17 +1,20 @@
 ﻿using DAL.Configuration.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using Service.Interfaces;
 
 namespace Service
 {
     public class MortgageCalculatorService : IMortgageCalculatorService
     {
+        private readonly IMortgageService _mortgageService;
         private readonly IRepository<Mortgage> _mortgageRepository;
         private readonly IAppConfiguration _appConfiguration;
 
-        public MortgageCalculatorService(IRepository<Mortgage> mortgageRepository, IAppConfiguration appConfiguration)
+        public MortgageCalculatorService(IMortgageService mortgageService, IRepository<Mortgage> mortgageRepository, IAppConfiguration appConfiguration)
         {
+            _mortgageService = mortgageService;
             _mortgageRepository = mortgageRepository;
             _appConfiguration = appConfiguration;
         }
@@ -21,7 +24,7 @@ namespace Service
         /// <returns></returns>
         public async Task CalculateMortgagesAsync()
         {
-            var mortgagesOfToday = await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today);
+            var mortgagesOfToday = await _mortgageService.GetMortgagesOfToday();
 
             foreach (var mortgage in mortgagesOfToday)
             {

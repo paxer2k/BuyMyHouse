@@ -34,6 +34,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 // Add services for dependency injection
 builder.Services.AddScoped<IMortgageService, MortgageService>();
+builder.Services.AddScoped<IMortgageCalculatorService, MortgageCalculatorService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 

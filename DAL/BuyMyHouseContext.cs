@@ -22,7 +22,7 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultContainer("MortApplications"); // tf am i supposed to do with this
+            modelBuilder.HasDefaultContainer("MortApplications");
 
             // Configuring mortgage entity
             modelBuilder.Entity<Mortgage>()

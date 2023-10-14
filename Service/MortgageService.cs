@@ -99,15 +99,31 @@ namespace Service
             if (mortgage == null)
                 throw new BadRequestException("The mortgage object was not initialized...");
 
-            if (string.IsNullOrEmpty(mortgage.Id.ToString()))
-                throw new BadRequestException("The mortgage does not exist in the database");
-
             return await _mortgageRepository.UpdateAsync(mortgage);
         }
 
-        public async Task<IEnumerable<Mortgage>> GetAllActiveMortgages()
+        /// <summary>
+        /// Method that gets mortgages of today (this is for calculation of the total mortgages (this is for the current day))
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetMortgagesOfToday()
         {
-            return await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today.AddHours(-24)); // this action will happen on next day
+            DateTime today = DateTime.Today;
+            DateTime tomorrow = today.AddDays(1);
+
+            return await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt >= today && m.CreatedAt < tomorrow);
+        }
+
+        /// <summary>
+        /// Method that gets mortgages of yesterday (this is for sending email on next day)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterday()
+        {
+            DateTime today = DateTime.Today;
+            DateTime yesterday = today.AddDays(-1);
+
+            return await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today);
         }
 
         #region Validation methods

@@ -26,10 +26,9 @@ namespace Service
         {
             ValidateMortgageDTO(mortgageDTO);
 
-            Mortgage newMortgage = new Mortgage()
+            Mortgage newMortgage = new Mortgage
             {
-                Customers = new List<Customer>(),
-                CreatedAt = DateTime.Now            
+                Customers = new List<Customer>()       
             };
 
             foreach (var customer in mortgageDTO.Customers)

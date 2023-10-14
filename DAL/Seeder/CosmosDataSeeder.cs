@@ -57,20 +57,17 @@ namespace DAL.Seeder
 
                 var mortgage1 = new Mortgage
                 {
-                    Customers = new List<Customer> { customer1, customer2 },
-                    CreatedAt = DateTime.Now
+                    Customers = new List<Customer> { customer1, customer2 }
                 };
 
                 var mortgage2 = new Mortgage
                 {
                     Customers = new List<Customer> { customer3 },
-                    CreatedAt = DateTime.Now
                 };
 
                 var mortgage3 = new Mortgage
                 {
                     Customers = new List<Customer> { customer4 },
-                    CreatedAt = DateTime.Now
                 };
 
                 _context.Mortgages.Add(mortgage1);

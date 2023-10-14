@@ -17,7 +17,7 @@ namespace Domain
         /// <summary>
         /// Date to track when the mortgage was created
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; internal set; } = DateTime.Now; // DO NOT MAKE PRIVATE DBSET DOESNT LIKE THAT
 
         /// <summary>
         /// Date to track expiry date for the mortgage 

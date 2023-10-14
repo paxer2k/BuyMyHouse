@@ -34,15 +34,15 @@ namespace DAL.Configuration
 
     public class MailerConfig
     {
-        public string? GridApiKey { get; internal set; }
-        public string? MailSender { get; internal set; }
+        public string GridApiKey { get; internal set; } = string.Empty; 
+        public string MailSender { get; internal set; } = string.Empty;
     }
 
     public class CosmosConfig
     {
-        public string? CosmosUrl { get; internal set; }
-        public string? CosmosPrimaryKey { get; internal set; }
-        public string? CosmosDbName { get; internal set; }
+        public string CosmosUrl { get; internal set; } = string.Empty;
+        public string? CosmosPrimaryKey { get; internal set; } = string.Empty;
+        public string? CosmosDbName { get; internal set; } = string.Empty; 
     }
 
     public class BusinessLogicConfig

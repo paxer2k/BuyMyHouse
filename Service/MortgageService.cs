@@ -3,6 +3,7 @@ using DAL.Configuration.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain;
 using Domain.DTOs;
+using Domain.Overview;
 using Service.Exceptions;
 using Service.Helpers;
 using Service.Interfaces;
@@ -23,38 +24,26 @@ namespace Service
 
         public async Task<MortgageDTO> CreateMortgageAsync(MortgageDTO mortgageDTO)
         {
-            if (mortgageDTO == null)
-                throw new BadRequestException("The mortage could not be created.");
-
-            if (mortgageDTO.Customers == null || mortgageDTO.Customers.Count <= 0)
-                throw new BadRequestException("You are required to fill out the customer(s) details");
-
-            if (mortgageDTO.Customers.Count > 2)
-                throw new BadRequestException("You are not allowed to have more than 2 customers for a mortgage.");
+            ValidateMortgageDTO(mortgageDTO);
 
             Mortgage newMortgage = new Mortgage()
             {
-                PartitionKey = "1",
-                Customers = new List<Customer>()
+                Customers = new List<Customer>(),
+                CreatedAt = DateTime.Now            
             };
 
             foreach (var customer in mortgageDTO.Customers)
             {
-                if (MortgageHelper.CalculateAge(customer.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
-                    throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
-
-                if (customer.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
-                    throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
+                ValidateCustomerDTO(customer);
 
                 Customer newCustomer = new Customer
                 {
                     FirstName = customer.FirstName,
                     LastName = customer.LastName,
                     Email = customer.Email,
-                    DateOfBirth = customer.DateOfBirth,
+                    DateOfBirth = customer.DateOfBirth.ToString("yyyy-MM-dd"),
                     AnualIncome = customer.AnualIncome,
                     PhoneNumber = customer.PhoneNumber,
-                    PartitionKey = "1",
                 };
 
                 newMortgage.Customers.Add(newCustomer);
@@ -62,17 +51,28 @@ namespace Service
 
             await _mortgageRepository.CreateAsync(newMortgage);
 
-            return _mapper.Map<MortgageDTO>(newMortgage);
+            /*return _mapper.Map<MortgageDTO>(newMortgage);*/
+
+            return new MortgageDTO
+            {
+                Customers = mortgageDTO.Customers
+            };
         }
 
-        public async Task<IEnumerable<Mortgage>> GetAllMortgagesAsync()
+        public async Task<GenericOverview<Mortgage>> GetAllMortgagesAsync(int startIndex, int endIndex)
         {
             var mortgages = await _mortgageRepository.GetAllAsync();
 
             if (mortgages == null)
                 throw new BadRequestException("The mortages could not be retrieved");
 
-            return mortgages;
+            var mortgageOverview = new GenericOverview<Mortgage>()
+            {
+                Data = mortgages.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(),
+                Total = mortgages.Count(),
+            };
+
+            return mortgageOverview;
         }
 
         public async Task<Mortgage> GetMortgageByIdAsync(Guid id)
@@ -105,11 +105,46 @@ namespace Service
             return await _mortgageRepository.UpdateAsync(mortgage);
         }
 
-
-
         public async Task<IEnumerable<Mortgage>> GetAllActiveMortgages()
         {
             return await _mortgageRepository.GetAllByConditionAsync(m => m.CreatedAt == DateTime.Today.AddHours(-24)); // this action will happen on next day
         }
+
+        #region Validation methods
+        /// <summary>
+        /// Validation methods
+        /// </summary>
+        /// <param name="mortgageDTO"></param>
+        /// <exception cref="BadRequestException"></exception>
+        private void ValidateMortgageDTO(MortgageDTO mortgageDTO)
+        {
+            if (mortgageDTO == null)
+                throw new BadRequestException("The mortage could not be created.");
+
+            if (mortgageDTO.Customers == null || mortgageDTO.Customers.Count <= 0)
+                throw new BadRequestException("You are required to fill out the customer(s) details");
+
+            if (mortgageDTO.Customers.Count > 2)
+                throw new BadRequestException("You are not allowed to have more than 2 customers for a mortgage.");
+        }
+
+        private void ValidateCustomerDTO(CustomerDTO customerDTO)
+        {
+            if (string.IsNullOrEmpty(customerDTO.FirstName) || string.IsNullOrEmpty(customerDTO.LastName))
+                throw new BadImageFormatException("First name and last name are mandatory to fill out.");
+
+            if (string.IsNullOrEmpty(customerDTO.Email))
+                throw new BadImageFormatException("The email is mandatory to fill out.");
+
+            if (string.IsNullOrEmpty(customerDTO.DateOfBirth.ToString()))
+                throw new BadImageFormatException("Your date of birth is required to be filled out");
+
+            if (MortgageHelper.CalculateAge(customerDTO.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
+                throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
+
+            if (customerDTO.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
+                throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
+        }
+        #endregion
     }
 }

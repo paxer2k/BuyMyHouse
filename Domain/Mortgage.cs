@@ -17,7 +17,7 @@ namespace Domain
         /// <summary>
         /// Date to track when the mortgage was created
         /// </summary>
-        public DateTime CreatedAt => DateTime.Now;
+        public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// Date to track expiry date for the mortgage 

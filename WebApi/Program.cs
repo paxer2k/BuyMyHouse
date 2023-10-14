@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // easy fix for automapper causing errors
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -33,16 +33,18 @@ builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configurat
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 // Add services for dependency injection
-builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IMortgageService, MortgageService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 
 var app = builder.Build();
 
-// seed if no data exists...
+// seed if no data exists... and ensure creation
 using (var scope = app.Services.CreateScope())
 {
+    var context = scope.ServiceProvider.GetRequiredService<BuyMyHouseContext>();
+    context.Database.EnsureCreated();
+
     var dataSeeder = scope.ServiceProvider.GetRequiredService<ICosmosDataSeeder>();
 
     dataSeeder.SeedData();

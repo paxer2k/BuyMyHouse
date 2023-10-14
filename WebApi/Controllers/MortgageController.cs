@@ -1,5 +1,6 @@
 using Domain;
 using Domain.DTOs;
+using Domain.Overview;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
 
@@ -17,11 +18,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Mortgage>>> GetMortgageApplications()
+        public async Task<ActionResult<GenericOverview<Mortgage>>> GetMortgageApplications(int startIndex = 0, int endIndex = 9)
         {
             try
             {
-                var mortgageApplications = await _mortgageService.GetAllMortgagesAsync();
+                var mortgageApplications = await _mortgageService.GetAllMortgagesAsync(startIndex, endIndex);
 
                 return Ok(mortgageApplications);
             }

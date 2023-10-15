@@ -1,8 +1,8 @@
 using DAL;
-using DAL.Configuration;
-using DAL.Configuration.Interfaces;
 using DAL.Repository;
 using DAL.Repository.Interfaces;
+using Domain.Configuration;
+using Domain.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Service;

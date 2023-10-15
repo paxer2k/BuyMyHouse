@@ -1,12 +1,13 @@
 using DAL;
-using DAL.Configuration;
-using DAL.Configuration.Interfaces;
 using DAL.Repository;
 using DAL.Repository.Interfaces;
 using DAL.Seeder;
 using DAL.Seeder.Interfaces;
+using Domain.Configuration;
+using Domain.Configuration.Interfaces;
 using Service;
 using Service.Interfaces;
+using System.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,9 +26,13 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
+
 builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
 
 builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configuration));
+
+
+builder.Services.AddSingleton<ISmtpClientMailer, SmtpClientMailer>();
 
 // Add repositories for dependency injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

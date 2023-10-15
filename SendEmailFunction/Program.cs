@@ -1,8 +1,8 @@
 using DAL;
-using DAL.Configuration;
-using DAL.Configuration.Interfaces;
 using DAL.Repository;
 using DAL.Repository.Interfaces;
+using Domain.Configuration;
+using Domain.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Service;
@@ -12,6 +12,7 @@ var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices(services => {
         services.AddSingleton<IAppConfiguration, AppConfiguration>();
+        services.AddSingleton<ISmtpClientMailer, SmtpClientMailer>();
         services.AddDbContext<BuyMyHouseContext>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IMortgageService, MortgageService>();

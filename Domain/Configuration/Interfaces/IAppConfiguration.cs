@@ -1,8 +1,8 @@
-﻿namespace DAL.Configuration.Interfaces
+﻿namespace Domain.Configuration.Interfaces
 {
     public interface IAppConfiguration
     {
-        MailerConfig MailerConfig { get; }
+        SmtpConfig SmtpConfig { get; }
         CosmosConfig CosmosConfig { get; }
         BusinessLogicConfig BusinessLogicConfig { get; }
     }

@@ -1,21 +1,23 @@
-﻿using DAL.Configuration.Interfaces;
+﻿using Domain.Configuration.Interfaces;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
 
-namespace DAL.Configuration
+namespace Domain.Configuration
 {
     public class AppConfiguration : IAppConfiguration
     {
-        public MailerConfig MailerConfig { get; set; }
+        public SmtpConfig SmtpConfig { get; set; }
         public CosmosConfig CosmosConfig { get; set; }
         public BusinessLogicConfig BusinessLogicConfig { get; set; }
 
         public AppConfiguration(IConfiguration configuration)
         {
-            MailerConfig = new MailerConfig
+            SmtpConfig = new SmtpConfig
             {
-                MailSender = configuration.GetSection("MailerConfig:MailSender").Value ?? "",
-                MailPassword = configuration.GetSection("MailerConfig:MailPassword").Value ?? ""
+                Sender = configuration.GetSection("SmtpConfig:Sender").Value ?? "",
+                Password = configuration.GetSection("SmtpConfig:Password").Value ?? "",
+                Server = configuration.GetSection("SmtpConfig:Server").Value ?? "",
+                Port = int.Parse(configuration.GetSection("SmtpConfig:Port").Value ?? "587"),
             };
             CosmosConfig = new CosmosConfig
             {
@@ -32,10 +34,12 @@ namespace DAL.Configuration
         }
     }
 
-    public class MailerConfig
+    public class SmtpConfig
     {
-        public string MailSender { get; internal set; } = string.Empty;
-        public string MailPassword { get; internal set; } = string.Empty;
+        public string Sender { get; internal set; } = string.Empty;
+        public string Password { get; internal set; } = string.Empty;
+        public string Server { get; internal set; } = string.Empty;
+        public int Port { get; internal set; } 
     }
 
     public class CosmosConfig

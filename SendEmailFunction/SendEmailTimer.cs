@@ -21,7 +21,7 @@ namespace SendEmailFunction
             try
             {
                 _logger.LogInformation("Sending mails to all customers");
-                await _emailService.SendEmails();
+                await _emailService.SendEmailsAsync();
             }
             catch (Exception ex)
             {

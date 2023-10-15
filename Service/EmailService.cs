@@ -1,7 +1,6 @@
-﻿using DAL.Configuration.Interfaces;
-using Domain;
+﻿using Domain;
+using Domain.Configuration.Interfaces;
 using Service.Interfaces;
-using System.Net;
 using System.Net.Mail;
 
 namespace Service
@@ -10,14 +9,16 @@ namespace Service
     {
         private readonly IMortgageService _mortgageService;
         private readonly IAppConfiguration _appConfiguration;
+        private readonly ISmtpClientMailer _smtpClientMailer;
 
-        public EmailService(IMortgageService mortgageService, IAppConfiguration appConfiguration)
+        public EmailService(IMortgageService mortgageService, IAppConfiguration appConfiguration, ISmtpClientMailer smtpClientMailer)
         {
             _mortgageService = mortgageService;
             _appConfiguration = appConfiguration;
+            _smtpClientMailer = smtpClientMailer;
         }
 
-        public async Task SendEmails()
+        public async Task SendEmailsAsync()
         {
             var mortgages = await _mortgageService.GetMortgagesOfToday(); // CHANGE THIS BACK LATER GetActiveMortgagesOfYesterday();
 
@@ -25,29 +26,22 @@ namespace Service
             {
                 foreach(var customer in mortgage.Customers)
                 {
-                    await GenerateEmail(customer, mortgage); // only generate an email for those who have sent an application
+                    await SendEmail(customer, mortgage);
                 }
             }
         }
 
-        private async Task GenerateEmail(Customer customer, Mortgage activeMortgage)
+        private async Task SendEmail(Customer customer, Mortgage activeMortgage)
         {
-
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(_appConfiguration.MailerConfig.MailSender);
+            mailMessage.From = new MailAddress(_appConfiguration.SmtpConfig.Sender);
             mailMessage.To.Add(customer.Email);
             mailMessage.Subject = "BuyMyHouse.co | Your mortgage application";
             mailMessage.Body = $"<div><strong>Thank you for using BuyMyHouse!</strong><br>" +
                                                 $"<p>Through <a href=https://localhost:7217/mortgages/{activeMortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
             mailMessage.IsBodyHtml = true;
 
-            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            NetworkCredential netCre = new NetworkCredential(_appConfiguration.MailerConfig.MailSender, _appConfiguration.MailerConfig.MailPassword);
-            smtpClient.Credentials = netCre;
-            smtpClient.UseDefaultCredentials = false;
-
-            await smtpClient.SendMailAsync(mailMessage);      
+            await _smtpClientMailer.SendEmailAsync(mailMessage);
         }
     }
 }

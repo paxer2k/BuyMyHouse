@@ -1,7 +1,6 @@
-﻿using DAL.Configuration.Interfaces;
-using DAL.Repository.Interfaces;
+﻿using DAL.Repository.Interfaces;
 using Domain;
-using Microsoft.EntityFrameworkCore;
+using Domain.Configuration.Interfaces;
 using Service.Interfaces;
 
 namespace Service

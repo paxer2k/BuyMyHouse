@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using DAL.Configuration.Interfaces;
-using DAL.Repository.Interfaces;
+﻿using DAL.Repository.Interfaces;
 using Domain;
+using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
-using Service.Helpers;
 using Service.Interfaces;
 
 namespace Service
@@ -148,11 +146,23 @@ namespace Service
             if (string.IsNullOrEmpty(customerDTO.DateOfBirth.ToString()))
                 throw new BadImageFormatException("Your date of birth is required to be filled out");
 
-            if (MortgageHelper.CalculateAge(customerDTO.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
+            if (CalculateAge(customerDTO.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
                 throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
 
             if (customerDTO.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
                 throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
+        }
+
+        private int CalculateAge(DateOnly birthDate)
+        {
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+            int age = currentDate.Year - birthDate.Year;
+
+            if (currentDate.DayOfYear < birthDate.DayOfYear)
+                age--;
+
+            return age;
         }
         #endregion
     }

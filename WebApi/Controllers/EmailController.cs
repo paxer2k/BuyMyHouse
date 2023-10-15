@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _emailService.SendEmails();
+                await _emailService.SendEmailsAsync();
 
                 return Ok();
             }

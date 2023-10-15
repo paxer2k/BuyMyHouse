@@ -1,8 +1,8 @@
 ﻿using DAL.Configuration.Interfaces;
 using Domain;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using Service.Interfaces;
+using System.Net;
+using System.Net.Mail;
 
 namespace Service
 {
@@ -32,24 +32,22 @@ namespace Service
 
         private async Task GenerateEmail(Customer customer, Mortgage activeMortgage)
         {
-            string gridApiKey = _appConfiguration.MailerConfig.GridApiKey!;
-            SendGridClient gridClient = new SendGridClient(gridApiKey);
 
-            EmailAddress sender = new EmailAddress(_appConfiguration.MailerConfig.MailSender, "BuyMyHouse.co");
-            string subject = "BuyMyHouse.co | Your mortgage application";
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(_appConfiguration.MailerConfig.MailSender);
+            mailMessage.To.Add(customer.Email);
+            mailMessage.Subject = "BuyMyHouse.co | Your mortgage application";
+            mailMessage.Body = $"<div><strong>Thank you for using BuyMyHouse!</strong><br>" +
+                                                $"<p>Through <a href=https://localhost:7217/mortgages/{activeMortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
+            mailMessage.IsBodyHtml = true;
 
-            EmailAddress receiver = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
-            string plainTextContent = $"Dear {customer.FirstName} {customer.LastName}, thank you for your interest in BuyMyHouse. Through this link you can view your personal mortgage offer";
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.EnableSsl = true;
+            NetworkCredential netCre = new NetworkCredential(_appConfiguration.MailerConfig.MailSender, _appConfiguration.MailerConfig.MailPassword);
+            smtpClient.Credentials = netCre;
+            smtpClient.UseDefaultCredentials = false;
 
-            string htmlContent = $"<div><strong>Thank you for using BuyMyHouse!</strong><br>" +
-                                    $"<p>Through <a href=http://localhost:7132/api/mortgages/{activeMortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
-
-            SendGridMessage message = MailHelper.CreateSingleEmail(sender, receiver, subject, plainTextContent, htmlContent);
-
-            activeMortgage.ExpiresAt = DateTime.Now.AddDays(1);
-            await _mortgageService.UpdateMortgageAsync(activeMortgage); // update mortgage by setting the expiry time
-
-            await gridClient.SendEmailAsync(message);
+            await smtpClient.SendMailAsync(mailMessage);      
         }
     }
 }

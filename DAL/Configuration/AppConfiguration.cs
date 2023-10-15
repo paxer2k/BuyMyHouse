@@ -14,8 +14,8 @@ namespace DAL.Configuration
         {
             MailerConfig = new MailerConfig
             {
-                GridApiKey = configuration.GetSection("MailerConfig:GridApiKey").Value ?? "",
-                MailSender = configuration.GetSection("MailerConfig:MailSender").Value ?? ""
+                MailSender = configuration.GetSection("MailerConfig:MailSender").Value ?? "",
+                MailPassword = configuration.GetSection("MailerConfig:MailPassword").Value ?? ""
             };
             CosmosConfig = new CosmosConfig
             {
@@ -34,8 +34,8 @@ namespace DAL.Configuration
 
     public class MailerConfig
     {
-        public string GridApiKey { get; internal set; } = string.Empty; 
         public string MailSender { get; internal set; } = string.Empty;
+        public string MailPassword { get; internal set; } = string.Empty;
     }
 
     public class CosmosConfig

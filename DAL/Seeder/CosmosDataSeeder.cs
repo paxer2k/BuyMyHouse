@@ -47,7 +47,7 @@ namespace DAL.Seeder
                 {
                     FirstName = "Alex",
                     LastName = "Arkhipov",
-                    Email = "alex.arkhipov.7590@gmail.com",
+                    Email = "alex.arkhipov867@gmail.com",
                     AnualIncome = 85000,
                     DateOfBirth = new DateOnly(1987, 9, 25).ToString("yyyy-MM-dd")
                 };

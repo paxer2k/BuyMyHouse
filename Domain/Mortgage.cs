@@ -7,7 +7,7 @@ namespace Domain
         /// <summary>
         /// A list contain one or two (one-few relationship) customers for mortgage
         /// </summary>
-        public List<Customer> Customers { get; set; } = new List<Customer>(); // cannot be null
+        public List<Customer> Customers { get; set; } = new List<Customer>(); // cannot be null create on init
 
         /// <summary>
         /// Total mortgage amount to be granted (additive if two customers)

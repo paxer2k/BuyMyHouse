@@ -41,6 +41,10 @@ namespace Service
                                                 $"<p>Through <a href=https://localhost:7217/mortgages/{activeMortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
             mailMessage.IsBodyHtml = true;
 
+            // update mortgage
+            activeMortgage.ExpiresAt = DateTime.Now.AddDays(1);
+            await _mortgageService.UpdateMortgageAsync(activeMortgage);
+
             await _smtpClientMailer.SendEmailAsync(mailMessage);
         }
     }

@@ -26,12 +26,12 @@ namespace Service
             {
                 foreach(var customer in mortgage.Customers)
                 {
-                    await SendEmail(customer, mortgage);
+                    await SendMortgageOfferEmailAsync(customer, mortgage);
                 }
             }
         }
 
-        private async Task SendEmail(Customer customer, Mortgage activeMortgage)
+        private async Task SendMortgageOfferEmailAsync(Customer customer, Mortgage activeMortgage)
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(_appConfiguration.SmtpConfig.Sender);

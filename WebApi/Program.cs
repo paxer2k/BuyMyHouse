@@ -31,8 +31,7 @@ builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSql
 
 builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configuration));
 
-
-builder.Services.AddSingleton<ISmtpClientMailer, SmtpClientMailer>();
+builder.Services.AddSingleton<ISendGridMailer, SendGridMailer>();
 
 // Add repositories for dependency injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

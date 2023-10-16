@@ -12,7 +12,6 @@ var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices(services => {
         services.AddSingleton<IAppConfiguration, AppConfiguration>();
-        services.AddSingleton<ISmtpClientMailer, SmtpClientMailer>();
         services.AddDbContext<BuyMyHouseContext>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IMortgageService, MortgageService>();

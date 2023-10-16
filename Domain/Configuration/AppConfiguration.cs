@@ -6,19 +6,13 @@ namespace Domain.Configuration
 {
     public class AppConfiguration : IAppConfiguration
     {
-        public SmtpConfig SmtpConfig { get; set; }
         public CosmosConfig CosmosConfig { get; set; }
         public BusinessLogicConfig BusinessLogicConfig { get; set; }
 
+        public SendGridConfig SendGridConfig { get; set; }
+
         public AppConfiguration(IConfiguration configuration)
         {
-            SmtpConfig = new SmtpConfig
-            {
-                Sender = configuration.GetSection("SmtpConfig:Sender").Value ?? "",
-                Password = configuration.GetSection("SmtpConfig:Password").Value ?? "",
-                Server = configuration.GetSection("SmtpConfig:Server").Value ?? "",
-                Port = int.Parse(configuration.GetSection("SmtpConfig:Port").Value ?? "587"),
-            };
             CosmosConfig = new CosmosConfig
             {
                 CosmosUrl = configuration.GetSection("CosmosConfig:CosmosUrl").Value ?? "",
@@ -31,15 +25,12 @@ namespace Domain.Configuration
                 MIN_AGE = int.Parse(configuration.GetSection("BusinessLogicConfig:MIN_AGE").Value ?? "18"),
                 INTEREST_RATE = double.Parse(configuration.GetSection("BusinessLogicConfig:INTEREST_RATE").Value ?? "4.50", CultureInfo.InvariantCulture)
             };
+            SendGridConfig = new SendGridConfig
+            {
+                SendGridApiKey = configuration.GetSection("SendGridConfig:SendGridApiKey").Value ?? "",
+                Sender = configuration.GetSection("SendGridConfig:Sender").Value ?? "",
+            };
         }
-    }
-
-    public class SmtpConfig
-    {
-        public string Sender { get; internal set; } = string.Empty;
-        public string Password { get; internal set; } = string.Empty;
-        public string Server { get; internal set; } = string.Empty;
-        public int Port { get; internal set; } 
     }
 
     public class CosmosConfig
@@ -54,5 +45,11 @@ namespace Domain.Configuration
         public double MIN_INCOME { get; internal set; }
         public int MIN_AGE { get; internal set; }
         public double INTEREST_RATE { get; internal set; }
+    }
+
+    public class SendGridConfig
+    {
+        public string SendGridApiKey { get; set; } = string.Empty;
+        public string Sender { get; set; } = string.Empty;
     }
 }

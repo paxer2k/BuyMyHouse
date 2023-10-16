@@ -2,8 +2,8 @@
 {
     public interface IAppConfiguration
     {
-        SmtpConfig SmtpConfig { get; }
         CosmosConfig CosmosConfig { get; }
         BusinessLogicConfig BusinessLogicConfig { get; }
+        SendGridConfig SendGridConfig { get; }
     }
 }

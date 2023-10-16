@@ -10,8 +10,8 @@ Additional points:
 1. This application contains a data seeder which will populate the Cosmos DB with 4 random users and 3 mortgage applications.
 2. In order to view this, you will need to download the Cosmos DB Emulator as this is all done in localhost: https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=windows%2Ccsharp&pivots=api-nosql. You do not have to configure anything else as all localhosts have the same information and all of this is already configured within the application.
 3. As mentioned before, the relationship between the customer and the mortgage is 1-many. Although the logic is made so that you can have a max of 2 customers per mortgage. I mean, it would be weird if you had more than one partner, no?
-4. The smpt client can ONLY send emails to gmail (because that is how I configured it), so if you want to test it with your gmail, make sure to make a fake gmail account or use your own.
-
+4. The send grid client should be able to send an email to any domain, feel free to use any account (a fake one would be more desirable)
+   
 Reasoning behind the database and architecture thereof:
 1. CosmosDB is able to handle faster load of data over a short period of time.
 2. CosmosDB is a NoSQL database, meaning it does not require a schema to make. The development process is really quick, and if any database or tables need to be dropped it's instant, whereas in SQL you have to consider foreign key constrains.

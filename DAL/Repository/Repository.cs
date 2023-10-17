@@ -48,7 +48,7 @@ namespace DAL.Repository
         public async Task<T> GetByConditionAsync(Expression<Func<T, bool>> predicate)
         {
             return await _entities.FirstOrDefaultAsync(predicate);
-        }
+        } 
 
         public async Task<bool?> UpdateAsync(T entity)
         {

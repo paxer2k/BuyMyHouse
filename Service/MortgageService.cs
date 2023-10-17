@@ -1,10 +1,12 @@
-﻿using DAL.Repository.Interfaces;
+﻿using AutoMapper;
+using DAL.Repository.Interfaces;
 using Domain;
 using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
 using Service.Interfaces;
+using System.Globalization;
 
 namespace Service
 {
@@ -12,10 +14,12 @@ namespace Service
     {
         private readonly IRepository<Mortgage> _mortgageRepository;
         private readonly IAppConfiguration _appConfiguration;
-        public MortgageService(IRepository<Mortgage> mortgageRepository, IAppConfiguration appConfiguration)
+        private readonly IMapper _mapper;
+        public MortgageService(IRepository<Mortgage> mortgageRepository, IAppConfiguration appConfiguration, IMapper mapper)
         {
             _mortgageRepository = mortgageRepository;
             _appConfiguration = appConfiguration;
+            _mapper = mapper;
         }
 
         public async Task<MortgageDTO> CreateMortgageAsync(MortgageDTO mortgageDTO)
@@ -33,7 +37,7 @@ namespace Service
                     FirstName = customer.FirstName,
                     LastName = customer.LastName,
                     Email = customer.Email,
-                    DateOfBirth = customer.DateOfBirth.ToString("yyyy-MM-dd"),
+                    DateOfBirth = customer.DateOfBirth,
                     AnualIncome = customer.AnualIncome,
                 };
 
@@ -42,41 +46,38 @@ namespace Service
 
             await _mortgageRepository.CreateAsync(newMortgage);
 
-            /*return _mapper.Map<MortgageDTO>(newMortgage);*/
-
-            return new MortgageDTO
-            {
-                Customers = mortgageDTO.Customers
-            };
+            return _mapper.Map<MortgageDTO>(newMortgage);
         }
 
-        public async Task<GenericOverview<Mortgage>> GetAllMortgagesAsync(int startIndex, int endIndex)
+        public async Task<GenericOverview<MortgageResponseDTO>> GetAllMortgagesAsync(int startIndex, int endIndex)
         {
             var mortgages = await _mortgageRepository.GetAllAsync();
 
             if (mortgages == null)
                 throw new BadRequestException("The mortages could not be retrieved");
 
-            var mortgageOverview = new GenericOverview<Mortgage>()
+            var mortgageResponseDto = _mapper.Map<IEnumerable<MortgageResponseDTO>>(mortgages);
+
+            var mortgageOverview = new GenericOverview<MortgageResponseDTO>()
             {
-                Data = mortgages.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(),
-                Total = mortgages.Count(),
+                Data = mortgageResponseDto.Skip(startIndex).Take(endIndex - startIndex + 1).ToList(),
+                Total = mortgageResponseDto.Count(),
             };
 
             return mortgageOverview;
         }
 
-        public async Task<Mortgage> GetMortgageByIdAsync(Guid id)
+        public async Task<MortgageResponseDTO> GetMortgageByIdAsync(Guid id)
         {
             var mortgage = await _mortgageRepository.GetByConditionAsync(m => m.Id == id);
 
-            if (mortgage == null)
+            if (mortgage is null)
                 throw new BadRequestException($"The mortgage with id {id} does not exist!");
 
             if (mortgage.ExpiresAt < DateTime.Now)
                 throw new ForbiddenException("The time for viewing this mortgage application has expired!");
 
-            return mortgage;
+            return _mapper.Map<MortgageResponseDTO>(mortgage);
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace Service
             if (string.IsNullOrEmpty(customerDTO.Email))
                 throw new BadImageFormatException("The email is mandatory to fill out.");
 
-            if (string.IsNullOrEmpty(customerDTO.DateOfBirth.ToString()))
+            if (string.IsNullOrEmpty(customerDTO.DateOfBirth))
                 throw new BadImageFormatException("Your date of birth is required to be filled out");
 
             if (CalculateAge(customerDTO.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
@@ -153,16 +154,21 @@ namespace Service
                 throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
         }
 
-        private int CalculateAge(DateOnly birthDate)
+        private int CalculateAge(string birthDate)
         {
-            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+            DateTime birthdate;
+            if (!DateTime.TryParseExact(birthDate, "yyyy-MM-dd", null, DateTimeStyles.None, out birthdate))
+                throw new ArgumentException("Invalid birthdate format. Please use 'yyyy-MM-dd'.");
 
-            int age = currentDate.Year - birthDate.Year;
+            DateTime currentDate = DateTime.Today;
+            int age = currentDate.Year - birthdate.Year;
 
-            if (currentDate.DayOfYear < birthDate.DayOfYear)
+            // Check if the birthday for this year has already occurred or not
+            if (birthdate.Date > currentDate.AddYears(-age))
                 age--;
 
             return age;
+
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using DAL.Repository.Interfaces;
+﻿using AutoMapper;
+using DAL.Repository.Interfaces;
 using Domain;
 using Domain.Configuration.Interfaces;
 using Service.Interfaces;
@@ -25,6 +26,11 @@ namespace Service
         {
             var mortgagesOfToday = await _mortgageService.GetMortgagesOfToday();
 
+            await CalculateAllMortgagesAsync(mortgagesOfToday);
+        }
+
+        private async Task CalculateAllMortgagesAsync(IEnumerable<Mortgage> mortgagesOfToday)
+        {
             foreach (var mortgage in mortgagesOfToday)
             {
                 var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain;
 using Domain.DTOs;
+using Domain.Overview;
 
 namespace Service.Profiles
 {
@@ -8,8 +9,15 @@ namespace Service.Profiles
     {
         public MortgageProfile()
         {
-            CreateMap<Mortgage, MortgageDTO>();
-            CreateMap<MortgageDTO, Mortgage>();
+            CreateMap<Mortgage, MortgageDTO>()
+                .ForMember(dest => dest.Customers, opt => opt.MapFrom(src => src.Customers))
+                .ReverseMap(); // If you want to map from MortgageDTO to Mortgage as well
+
+            CreateMap<Mortgage, MortgageResponseDTO>()
+                .ForMember(dest => dest.Customers, opt => opt.MapFrom(src => src.Customers))
+                .ReverseMap(); // If you want to map from MortgageDTO to Mortgage as well
+
+            CreateMap<Customer, CustomerDTO>();
         }
     }
 }

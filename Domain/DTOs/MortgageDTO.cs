@@ -2,6 +2,6 @@
 {
     public class MortgageDTO
     {
-        public List<CustomerDTO> Customers { get; set; }
+        public List<CustomerDTO> Customers { get; set; } = new List<CustomerDTO>();
     }
 }

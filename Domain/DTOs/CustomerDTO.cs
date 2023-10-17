@@ -6,6 +6,6 @@
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public double AnualIncome { get; set; }
-        public DateOnly DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; } = string.Empty;
     }
 }

@@ -35,10 +35,14 @@ builder.Services.AddSingleton<ISendGridMailer, SendGridMailer>();
 
 // Add repositories for dependency injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
+builder.Services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
 
 // Add services for dependency injection
 builder.Services.AddScoped<IMortgageService, MortgageService>();
 builder.Services.AddScoped<IMortgageCalculatorService, MortgageCalculatorService>();
+builder.Services.AddScoped<IMortgageQuery, MortgageQuery>();
+builder.Services.AddScoped<IMortgageCommand, MortgageCommand>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 

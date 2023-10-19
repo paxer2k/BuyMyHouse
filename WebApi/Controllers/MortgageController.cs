@@ -11,13 +11,13 @@ namespace WebApi.Controllers
     [ApiController]
     public class MortgageController : ControllerBase
     {
-        private readonly IMortgageQuery _mortgageQuery;
-        private readonly IMortgageCommand _mortgageCommad;
+        private readonly IMortgageQueryService _mortgageQueryService;
+        private readonly IMortgageCommandService _mortgageCommandService;
 
-        public MortgageController(IMortgageQuery mortgageQuery, IMortgageCommand mortgageCommad)
+        public MortgageController(IMortgageQueryService mortgageQueryService, IMortgageCommandService mortgageCommadService)
         {
-            _mortgageQuery = mortgageQuery;
-            _mortgageCommad = mortgageCommad;
+            _mortgageQueryService = mortgageQueryService;
+            _mortgageCommandService = mortgageCommadService;
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var mortgageApplications = await _mortgageQuery.GetAllMortgagesAsync(startIndex, endIndex);
+                var mortgageApplications = await _mortgageQueryService.GetAllMortgagesAsync(startIndex, endIndex);
 
                 return Ok(mortgageApplications);
             }
@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var mortgageApplication = await _mortgageQuery.GetMortgageByIdAsync(id);
+                var mortgageApplication = await _mortgageQueryService.GetMortgageByIdAsync(id);
                     
                 return Ok(mortgageApplication);
             }
@@ -55,7 +55,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var newMortgage = await _mortgageCommad.CreateMortgageAsync(mortgageApplicationDTO);
+                var newMortgage = await _mortgageCommandService.CreateMortgageAsync(mortgageApplicationDTO);
 
                 return Ok(newMortgage);
             }

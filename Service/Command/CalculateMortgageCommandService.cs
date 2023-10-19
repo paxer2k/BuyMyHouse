@@ -5,12 +5,12 @@ using Service.Query.Interfaces;
 
 namespace Service.Command
 {
-    public class CalculateMortgageCommand : ICalculateMortgageCommand
+    public class CalculateMortgageCommandService : ICalculateMortgageCommandService
     {
-        private readonly IMortgageCommand _mortgageCommand;
-        private readonly IMortgageQuery _mortgageQuery;
+        private readonly IMortgageCommandService _mortgageCommand;
+        private readonly IMortgageQueryService _mortgageQuery;
         private readonly IAppConfiguration _appConfiguration;
-        public CalculateMortgageCommand(IMortgageCommand mortgageCommand, IMortgageQuery mortgageQuery, IAppConfiguration appConfiguration)
+        public CalculateMortgageCommandService(IMortgageCommandService mortgageCommand, IMortgageQueryService mortgageQuery, IAppConfiguration appConfiguration)
         {
             _mortgageCommand = mortgageCommand;
             _mortgageQuery = mortgageQuery;

@@ -9,12 +9,12 @@ using System.Globalization;
 
 namespace Service.Command
 {
-    public class MortgageCommand : IMortgageCommand
+    public class MortgageCommandService : IMortgageCommandService
     {
         private readonly ICommandRepository<Mortgage> _mortgageCommandRepository;
         private readonly IAppConfiguration _appConfiguration;
         private readonly IMapper _mapper;
-        public MortgageCommand(ICommandRepository<Mortgage> mortgageCommandRepository, IAppConfiguration appConfiguration, IMapper mapper)
+        public MortgageCommandService(ICommandRepository<Mortgage> mortgageCommandRepository, IAppConfiguration appConfiguration, IMapper mapper)
         {
             _mortgageCommandRepository = mortgageCommandRepository;
             _appConfiguration = appConfiguration;

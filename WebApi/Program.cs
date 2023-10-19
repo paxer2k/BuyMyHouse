@@ -45,10 +45,14 @@ builder.Services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepositor
 // Add services for dependency injection
 builder.Services.AddScoped<IMortgageService, MortgageService>();
 builder.Services.AddScoped<IMortgageCalculatorService, MortgageCalculatorService>();
-builder.Services.AddScoped<IMortgageQuery, MortgageQuery>();
-builder.Services.AddScoped<IMortgageCommand, MortgageCommand>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
+
+// isolate this later...
+builder.Services.AddScoped<IMortgageQueryService, MortgageQueryService>();
+builder.Services.AddScoped<IMortgageCommandService, MortgageCommandService>();
+builder.Services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();
+builder.Services.AddScoped<IEmailCommandService, EmailCommandService>();
 
 var app = builder.Build();
 

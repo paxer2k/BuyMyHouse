@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Service.Command.Interfaces
 {
-    public interface ICalculateMortgageCommand
+    public interface ICalculateMortgageCommandService
     {
         Task CalculateMortgagesAsync();
     }

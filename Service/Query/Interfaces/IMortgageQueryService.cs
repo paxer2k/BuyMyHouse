@@ -4,7 +4,7 @@ using Domain.Overview;
 
 namespace Service.Query.Interfaces
 {
-    public interface IMortgageQuery
+    public interface IMortgageQueryService
     {
         Task<GenericOverview<MortgageResponseDTO>> GetAllMortgagesAsync(int startIndex = 0, int endIndex = 9);
         Task<MortgageResponseDTO> GetMortgageByIdAsync(Guid id);

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Service.Command.Interfaces;
 using Service.Interfaces;
 
 namespace WebApi.Controllers
@@ -7,11 +8,11 @@ namespace WebApi.Controllers
     [ApiController]
     public class MortgageCalculatorController : ControllerBase
     {
-        private readonly IMortgageCalculatorService _mortgageCalculatorService;
+        private readonly ICalculateMortgageCommandService _calculateMortgageCommandService;
 
-        public MortgageCalculatorController(IMortgageCalculatorService mortgageCalculatorService)
+        public MortgageCalculatorController(ICalculateMortgageCommandService calculateMortgageCommandService)
         {
-            _mortgageCalculatorService = mortgageCalculatorService;
+            _calculateMortgageCommandService = calculateMortgageCommandService;
         }
 
         [HttpPost]
@@ -19,7 +20,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mortgageCalculatorService.CalculateMortgagesAsync();
+                await _calculateMortgageCommandService.CalculateMortgagesAsync();
 
                 return Ok();
             }

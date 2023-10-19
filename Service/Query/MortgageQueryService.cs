@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DAL.Repository.Interfaces;
 using Domain;
-using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
@@ -9,15 +8,13 @@ using Service.Query.Interfaces;
 
 namespace Service.Query
 {
-    public class MortgageQuery : IMortgageQuery
+    public class MortgageQueryService : IMortgageQueryService
     {
         private readonly IQueryRepository<Mortgage> _mortgageQueryRepository;
-        private readonly IAppConfiguration _appConfiguration;
         private readonly IMapper _mapper;
-        public MortgageQuery(IQueryRepository<Mortgage> mortgageQueryRepository, IAppConfiguration appConfiguration, IMapper mapper)
+        public MortgageQueryService(IQueryRepository<Mortgage> mortgageQueryRepository, IMapper mapper)
         {
             _mortgageQueryRepository = mortgageQueryRepository;
-            _appConfiguration = appConfiguration;
             _mapper = mapper;
         }
 

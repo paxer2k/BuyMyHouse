@@ -1,8 +1,5 @@
-using Domain;
-using Domain.DTOs;
-using Domain.Overview;
 using Microsoft.AspNetCore.Mvc;
-using Service.Interfaces;
+using Service.Command.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -10,11 +7,11 @@ namespace WebApi.Controllers
     [ApiController]
     public class EmailController : ControllerBase
     {
-        private readonly IEmailService _emailService;
+        private readonly IEmailCommandService _emailCommandService;
 
-        public EmailController(IEmailService emailService)
+        public EmailController(IEmailCommandService emailCommandService)
         {
-            _emailService = emailService;
+            _emailCommandService = emailCommandService;
         }
 
         [HttpPost]
@@ -22,7 +19,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _emailService.SendEmailsAsync();
+                await _emailCommandService.SendEmailsAsync();
 
                 return Ok();
             }

@@ -1,6 +1,6 @@
 ﻿namespace Service.Command.Interfaces
 {
-    public interface IEmailCommand
+    public interface IEmailCommandService
     {
         Task SendEmailsAsync();
     }

@@ -12,16 +12,18 @@ using Service.Query.Interfaces;
 
 namespace Service.Command
 {
-    public class EmailCommand : IEmailCommand
+    public class EmailCommandService : IEmailCommandService
     {
-        private readonly IMortgageQuery _mortgageQuery;
-        private readonly IMortgageCommand _mortgageCommand;
+        private readonly IMortgageQueryService _mortgageQuery;
+        private readonly IMortgageCommandService _mortgageCommand;
+        private readonly IAppConfiguration _appConfiguration;
         private readonly ISendGridMailer _sendGridMailer;
 
-        public EmailCommand(IMortgageQuery mortgageQuery, IMortgageCommand mortgageCommand, IAppConfiguration appConfiguration, ISendGridMailer sendGridMailer)
+        public EmailCommandService(IMortgageQueryService mortgageQuery, IMortgageCommandService mortgageCommand, IAppConfiguration appConfiguration, ISendGridMailer sendGridMailer)
         {
             _mortgageQuery = mortgageQuery;
             _mortgageCommand = mortgageCommand;
+            _appConfiguration = appConfiguration;
             _sendGridMailer = sendGridMailer;
         }
 

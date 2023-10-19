@@ -49,7 +49,7 @@ namespace DAL.Seeder
                     LastName = "Arkhipov",
                     Email = "alex.arkhipov867@gmail.com",
                     AnualIncome = 85000,
-                    DateOfBirth = "1987-9-25)"/*.ToString("yyyy-MM-dd")*/
+                    DateOfBirth = "1987-9-25"/*.ToString("yyyy-MM-dd")*/
                 };
 
                 var mortgage1 = new Mortgage();

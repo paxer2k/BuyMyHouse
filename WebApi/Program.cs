@@ -6,7 +6,11 @@ using DAL.Seeder.Interfaces;
 using Domain.Configuration;
 using Domain.Configuration.Interfaces;
 using Service;
+using Service.Command;
+using Service.Command.Interfaces;
 using Service.Interfaces;
+using Service.Query;
+using Service.Query.Interfaces;
 using System.Configuration;
 using System.Reflection;
 

@@ -3,11 +3,11 @@ using DAL.Repository.Interfaces;
 using Domain;
 using Domain.Configuration.Interfaces;
 using Domain.DTOs;
+using Service.Command.Interfaces;
 using Service.Exceptions;
-using Service.Interfaces;
 using System.Globalization;
 
-namespace Service
+namespace Service.Command
 {
     public class MortgageCommand : IMortgageCommand
     {

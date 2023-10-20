@@ -5,17 +5,23 @@ using Domain.Configuration;
 using Domain.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Service;
-using Service.Interfaces;
+using Service.Command;
+using Service.Command.Interfaces;
+using Service.Query;
+using Service.Query.Interfaces;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices(services => {
         services.AddSingleton<IAppConfiguration, AppConfiguration>();
         services.AddDbContext<BuyMyHouseContext>();
-        services.AddScoped<IMortgageCalculatorService, MortgageCalculatorService>();
-        services.AddScoped<IMortgageService, MortgageService>();
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();
+        services.AddScoped<IMortgageCommandService, MortgageCommandService>();
+        services.AddScoped<IMortgageQueryService, MortgageQueryService>();
+        services.AddScoped<IMortgageCommandService, MortgageCommandService>();
+        services.AddScoped<IMortgageQueryService, MortgageQueryService>();
+        services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
+        services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
     })
     .Build();
 

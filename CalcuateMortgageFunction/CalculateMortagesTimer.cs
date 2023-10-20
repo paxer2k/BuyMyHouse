@@ -1,18 +1,18 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Service.Interfaces;
+using Service.Command.Interfaces;
 
 namespace CalcuateMortgageFunction
 {
     public class CalculateMortagesTimer
     {
         private readonly ILogger _logger;
-        private readonly IMortgageCalculatorService _mortgageCalculatorService;
+        private readonly ICalculateMortgageCommandService _calculateMortgageCommandService;
 
-        public CalculateMortagesTimer(ILoggerFactory loggerFactory, IMortgageCalculatorService mortgageCalculatorService)
+        public CalculateMortagesTimer(ILoggerFactory loggerFactory, ICalculateMortgageCommandService calculateMortgageCommandService)
         {
             _logger = loggerFactory.CreateLogger<CalculateMortagesTimer>();
-            _mortgageCalculatorService = mortgageCalculatorService;
+            _calculateMortgageCommandService = calculateMortgageCommandService;
         }
 
         [Function("CalculateMortgagesTimer")]
@@ -21,7 +21,7 @@ namespace CalcuateMortgageFunction
             try
             {
                 _logger.LogInformation($"Calculating mortgages for all applications...");
-                await _mortgageCalculatorService.CalculateMortgagesAsync();
+                await _calculateMortgageCommandService.CalculateMortgagesAsync();
             }
             catch (Exception ex)
             {

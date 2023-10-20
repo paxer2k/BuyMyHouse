@@ -1,8 +1,8 @@
 ﻿using SendGrid.Helpers.Mail;
 
-namespace Service.Interfaces
+namespace Service.Command.Interfaces
 {
-    public interface ISendGridMailer
+    public interface ISendGridMailerCommandService
     {
         Task SendEmailAsync(SendGridMessage message);
     }

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Command.Interfaces;
-using Service.Interfaces;
 
 namespace WebApi.Controllers
 {

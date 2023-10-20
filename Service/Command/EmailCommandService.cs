@@ -1,13 +1,7 @@
-﻿using Domain.Configuration.Interfaces;
-using Domain;
+﻿using Domain;
+using Domain.Configuration.Interfaces;
 using SendGrid.Helpers.Mail;
 using Service.Command.Interfaces;
-using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Service.Query.Interfaces;
 
 namespace Service.Command
@@ -17,14 +11,14 @@ namespace Service.Command
         private readonly IMortgageQueryService _mortgageQuery;
         private readonly IMortgageCommandService _mortgageCommand;
         private readonly IAppConfiguration _appConfiguration;
-        private readonly ISendGridMailer _sendGridMailer;
+        private readonly ISendGridMailerCommandService _sendGridMailerCommandService;
 
-        public EmailCommandService(IMortgageQueryService mortgageQuery, IMortgageCommandService mortgageCommand, IAppConfiguration appConfiguration, ISendGridMailer sendGridMailer)
+        public EmailCommandService(IMortgageQueryService mortgageQuery, IMortgageCommandService mortgageCommand, IAppConfiguration appConfiguration, ISendGridMailerCommandService sendGridMailerCommandService)
         {
             _mortgageQuery = mortgageQuery;
             _mortgageCommand = mortgageCommand;
             _appConfiguration = appConfiguration;
-            _sendGridMailer = sendGridMailer;
+            _sendGridMailerCommandService = sendGridMailerCommandService;
         }
 
         public async Task SendEmailsAsync()
@@ -55,7 +49,7 @@ namespace Service.Command
 
             var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
-            await _sendGridMailer.SendEmailAsync(message);
+            await _sendGridMailerCommandService.SendEmailAsync(message);
         }
     }
 }

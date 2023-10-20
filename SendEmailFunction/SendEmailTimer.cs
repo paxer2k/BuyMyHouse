@@ -1,18 +1,18 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Service.Interfaces;
+using Service.Command.Interfaces;
 
 namespace SendEmailFunction
 {
     public class SendEmailTimer
     {
         private readonly ILogger _logger;
-        private readonly IEmailService _emailService;
+        private readonly IEmailCommandService _emailCommandService;
 
-        public SendEmailTimer(ILoggerFactory loggerFactory, IEmailService emailService)
+        public SendEmailTimer(ILoggerFactory loggerFactory, IEmailCommandService emailCommandService)
         {
             _logger = loggerFactory.CreateLogger<SendEmailTimer>();
-            _emailService = emailService;
+            _emailCommandService = emailCommandService;
         }
 
         [Function("SendEmailTimer")]
@@ -21,7 +21,7 @@ namespace SendEmailFunction
             try
             {
                 _logger.LogInformation("Sending mails to all customers");
-                await _emailService.SendEmailsAsync();
+                await _emailCommandService.SendEmailsAsync();
             }
             catch (Exception ex)
             {

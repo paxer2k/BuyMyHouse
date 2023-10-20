@@ -5,13 +5,10 @@ using DAL.Seeder;
 using DAL.Seeder.Interfaces;
 using Domain.Configuration;
 using Domain.Configuration.Interfaces;
-using Service;
 using Service.Command;
 using Service.Command.Interfaces;
-using Service.Interfaces;
 using Service.Query;
 using Service.Query.Interfaces;
-using System.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,21 +31,14 @@ var configuration = new ConfigurationBuilder()
 builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
 
 builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configuration));
-
-builder.Services.AddSingleton<ISendGridMailer, SendGridMailer>();
+builder.Services.AddSingleton<ISendGridMailerCommandService, SendGridMailerCommandService>();
 
 // Add repositories for dependency injection
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
 builder.Services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
-
-// Add services for dependency injection
-builder.Services.AddScoped<IMortgageService, MortgageService>();
-builder.Services.AddScoped<IMortgageCalculatorService, MortgageCalculatorService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 
-// isolate this later...
+// Add services
 builder.Services.AddScoped<IMortgageQueryService, MortgageQueryService>();
 builder.Services.AddScoped<IMortgageCommandService, MortgageCommandService>();
 builder.Services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();

@@ -1,16 +1,16 @@
 ﻿using Domain.Configuration.Interfaces;
-using SendGrid;
 using SendGrid.Helpers.Mail;
-using Service.Interfaces;
+using SendGrid;
+using Service.Command.Interfaces;
 
-namespace Service
+namespace Service.Command
 {
-    public class SendGridMailer : ISendGridMailer
+    public class SendGridMailerCommandService : ISendGridMailerCommandService
     {
         private IAppConfiguration _appConfiguration;
         private SendGridClient _sendGridClient;
 
-        public SendGridMailer(IAppConfiguration appConfiguration)
+        public SendGridMailerCommandService(IAppConfiguration appConfiguration)
         {
             _appConfiguration = appConfiguration;
 

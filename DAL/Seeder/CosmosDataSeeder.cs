@@ -6,15 +6,17 @@ namespace DAL.Seeder
 {
     public class CosmosDataSeeder : ICosmosDataSeeder
     {
-        private readonly IRepository<Mortgage> _mortgageRepository;
-        public CosmosDataSeeder(IRepository<Mortgage> mortgageRepository)
+        private readonly IQueryRepository<Mortgage> _mortgageQueryRepository;
+        private readonly ICommandRepository<Mortgage> _mortgageCommandRepository;
+        public CosmosDataSeeder(IQueryRepository<Mortgage> mortgageQueryRepository, ICommandRepository<Mortgage> mortgageCommandRepository)
         {
-            _mortgageRepository = mortgageRepository; 
+            _mortgageQueryRepository = mortgageQueryRepository;
+            _mortgageCommandRepository = mortgageCommandRepository; 
         }
 
         public async Task SeedDataAsync()
         {
-            if (!(await _mortgageRepository.GetAllAsync()).Any())
+            if (!(await _mortgageQueryRepository.GetAllAsync()).Any())
             {
                 var customer1 = new Customer
                 {
@@ -62,9 +64,12 @@ namespace DAL.Seeder
                 var mortgage3 = new Mortgage();
                 mortgage3.Customers.Add(customer4);
 
-                await _mortgageRepository.CreateAsync(mortgage1);
-                await _mortgageRepository.CreateAsync(mortgage2);
-                await _mortgageRepository.CreateAsync(mortgage3);
+                List<Mortgage> mortgages = new List<Mortgage> {mortgage1, mortgage2, mortgage3};
+
+                foreach(var mortgage in mortgages)
+                {
+                    await _mortgageCommandRepository.CreateAsync(mortgage);
+                }
             }
         }
     }

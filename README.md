@@ -3,14 +3,15 @@ This is an assignment for the Cloud Databases course. This assignment entails ma
 How the application works:
 1. You have to sign-up for a mortgage as one or two customers. No more, no less. If you have two customers, the anual income will be shared between the two people. This is done through the POST endpoint in the mortgages.
 2. As a customer, you can only have one mortgage application active at a time.
-3. When the mortgage application is sent, it will be processed along with all of the other application that were sent that on at 11:59:59PM (just before midnight)
-4. In the morning, at around 6-7AM an email will be sent to all the customers who applied for a mortgage where they can view their mortgages (through a localhost endpoint)
+3. When the mortgage application is sent, it will be processed along with all of the other application that were sent that on at 11PM.
+4. In the morning, at around 7AM an email will be sent to all the customers who applied for a mortgage where they can view their mortgages (through a localhost endpoint)
 
 Additional points:
 1. This application contains a data seeder which will populate the Cosmos DB with 4 random users and 3 mortgage applications.
 2. In order to view this, you will need to download the Cosmos DB Emulator as this is all done in localhost: https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=windows%2Ccsharp&pivots=api-nosql. You do not have to configure anything else as all localhosts have the same information and all of this is already configured within the application.
-3. As mentioned before, the relationship between the customer and the mortgage is 1-many. Although the logic is made so that you can have a max of 2 customers per mortgage. I mean, it would be weird if you had more than one partner, no?
-4. The send grid client should be able to send an email to any domain, feel free to use any account (a fake one would be more desirable)
+3. For the azure function to work, make sure you include them in multiple start-up project and also run 'azurite'. You can install azurite through the terminal (npm install -g azurite)
+4. As mentioned before, the relationship between the customer and the mortgage is 1-many. Although the logic is made so that you can have a max of 2 customers per mortgage. I mean, it would be weird if you had more than one partner, no?
+5. The send grid client should be able to send an email to any domain, feel free to use any account (a fake one would be more desirable)
    
 Reasoning behind the database and architecture thereof:
 1. CosmosDB is able to handle faster load of data over a short period of time.

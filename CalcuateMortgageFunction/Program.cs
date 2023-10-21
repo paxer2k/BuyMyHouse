@@ -15,13 +15,14 @@ var host = new HostBuilder()
     .ConfigureServices(services => {
         services.AddSingleton<IAppConfiguration, AppConfiguration>();
         services.AddDbContext<BuyMyHouseContext>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();
         services.AddScoped<IMortgageCommandService, MortgageCommandService>();
         services.AddScoped<IMortgageQueryService, MortgageQueryService>();
         services.AddScoped<IMortgageCommandService, MortgageCommandService>();
         services.AddScoped<IMortgageQueryService, MortgageQueryService>();
         services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
-        services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
+        services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));        
     })
     .Build();
 

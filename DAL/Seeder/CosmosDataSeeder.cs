@@ -24,7 +24,7 @@ namespace DAL.Seeder
                     LastName = "Doe",
                     Email = "john@example.com",
                     AnualIncome = 75000,
-                    DateOfBirth = "1985-3-15"/*.ToString("yyyy-MM-dd")*/
+                    DateOfBirth = "1985-3-15"
                 };
 
                 var customer2 = new Customer

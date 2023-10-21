@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Domain;
 using Domain.DTOs;
-using Domain.Overview;
 
 namespace Service.Profiles
 {

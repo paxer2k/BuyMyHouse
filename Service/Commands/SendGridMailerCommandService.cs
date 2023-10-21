@@ -1,9 +1,9 @@
 ﻿using Domain.Configuration.Interfaces;
 using SendGrid.Helpers.Mail;
 using SendGrid;
-using Service.Command.Interfaces;
+using Service.Commands.Interfaces;
 
-namespace Service.Command
+namespace Service.Commands
 {
     public class SendGridMailerCommandService : ISendGridMailerCommandService
     {

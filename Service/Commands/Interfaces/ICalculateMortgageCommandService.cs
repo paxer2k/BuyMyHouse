@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Command.Interfaces
+namespace Service.Commands.Interfaces
 {
     public interface ICalculateMortgageCommandService
     {

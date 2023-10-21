@@ -1,9 +1,9 @@
 ﻿using Domain;
 using Domain.Configuration.Interfaces;
-using Service.Command.Interfaces;
-using Service.Query.Interfaces;
+using Service.Commands.Interfaces;
+using Service.Queries.Interfaces;
 
-namespace Service.Command
+namespace Service.Commands
 {
     public class CalculateMortgageCommandService : ICalculateMortgageCommandService
     {

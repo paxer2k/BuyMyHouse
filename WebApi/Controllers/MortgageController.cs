@@ -2,8 +2,8 @@ using Domain;
 using Domain.DTOs;
 using Domain.Overview;
 using Microsoft.AspNetCore.Mvc;
-using Service.Command.Interfaces;
-using Service.Query.Interfaces;
+using Service.Commands.Interfaces;
+using Service.Queries.Interfaces;
 
 namespace WebApi.Controllers
 {

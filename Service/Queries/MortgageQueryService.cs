@@ -4,9 +4,9 @@ using Domain;
 using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
-using Service.Query.Interfaces;
+using Service.Queries.Interfaces;
 
-namespace Service.Query
+namespace Service.Queries
 {
     public class MortgageQueryService : IMortgageQueryService
     {

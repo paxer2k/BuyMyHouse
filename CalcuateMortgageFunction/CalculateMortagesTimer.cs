@@ -1,6 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Service.Command.Interfaces;
+using Service.Commands.Interfaces;
 
 namespace CalcuateMortgageFunction
 {

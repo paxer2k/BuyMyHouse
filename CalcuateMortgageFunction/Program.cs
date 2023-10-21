@@ -5,10 +5,10 @@ using Domain.Configuration;
 using Domain.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Service.Command;
-using Service.Command.Interfaces;
-using Service.Query;
-using Service.Query.Interfaces;
+using Service.Commands;
+using Service.Commands.Interfaces;
+using Service.Queries;
+using Service.Queries.Interfaces;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()

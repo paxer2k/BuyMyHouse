@@ -5,10 +5,10 @@ using DAL.Seeder;
 using DAL.Seeder.Interfaces;
 using Domain.Configuration;
 using Domain.Configuration.Interfaces;
-using Service.Command;
-using Service.Command.Interfaces;
-using Service.Query;
-using Service.Query.Interfaces;
+using Service.Commands;
+using Service.Commands.Interfaces;
+using Service.Queries;
+using Service.Queries.Interfaces;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

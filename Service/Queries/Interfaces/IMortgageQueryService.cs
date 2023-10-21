@@ -2,7 +2,7 @@
 using Domain.DTOs;
 using Domain.Overview;
 
-namespace Service.Query.Interfaces
+namespace Service.Queries.Interfaces
 {
     public interface IMortgageQueryService
     {

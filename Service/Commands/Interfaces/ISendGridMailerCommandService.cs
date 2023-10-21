@@ -1,6 +1,6 @@
 ﻿using SendGrid.Helpers.Mail;
 
-namespace Service.Command.Interfaces
+namespace Service.Commands.Interfaces
 {
     public interface ISendGridMailerCommandService
     {

@@ -1,10 +1,10 @@
 ﻿using Domain;
 using Domain.Configuration.Interfaces;
 using SendGrid.Helpers.Mail;
-using Service.Command.Interfaces;
-using Service.Query.Interfaces;
+using Service.Commands.Interfaces;
+using Service.Queries.Interfaces;
 
-namespace Service.Command
+namespace Service.Commands
 {
     public class EmailCommandService : IEmailCommandService
     {

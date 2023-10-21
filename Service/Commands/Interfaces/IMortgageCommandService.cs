@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Domain.DTOs;
 
-namespace Service.Command.Interfaces
+namespace Service.Commands.Interfaces
 {
     public interface IMortgageCommandService
     {

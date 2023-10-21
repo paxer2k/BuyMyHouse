@@ -28,8 +28,10 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 
-builder.Services.AddDbContext<BuyMyHouseContext>(); //(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MortgageDb")));
+// Add db context
+builder.Services.AddDbContext<BuyMyHouseContext>();
 
+// Add configuration and mail service
 builder.Services.AddSingleton<IAppConfiguration>(new AppConfiguration(configuration));
 builder.Services.AddSingleton<ISendGridMailerCommandService, SendGridMailerCommandService>();
 

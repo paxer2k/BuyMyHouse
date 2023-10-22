@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.DTOs
+﻿namespace Domain.DTOs
 {
     public class MortgageResponseDTO
     {
@@ -24,5 +18,6 @@ namespace Domain.DTOs
         /// Date to track expiry date for the mortgage 
         /// </summary>
         public DateTime ExpiresAt { get; set; }
+        public bool IsApproved { get; set; }
     }
 }

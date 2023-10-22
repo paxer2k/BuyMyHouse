@@ -18,18 +18,21 @@ namespace Service.Commands
         }
         public async Task CalculateMortgagesAsync()
         {
-            var mortgagesOfToday = await _mortgageQuery.GetMortgagesOfToday();
+            var activeMortgagesOfYesterday = await _mortgageQuery.GetActiveMortgagesOfYesterday();
 
-            await CalculateAllMortgagesAsync(mortgagesOfToday);
+            await CalculateAllMortgagesAsync(activeMortgagesOfYesterday);
         }
 
-        private async Task CalculateAllMortgagesAsync(IEnumerable<Mortgage> mortgagesOfToday)
+        private async Task CalculateAllMortgagesAsync(IEnumerable<Mortgage> activeMortgagesOfYesterday)
         {
-            foreach (var mortgage in mortgagesOfToday)
+            foreach (var mortgage in activeMortgagesOfYesterday)
             {
                 var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
 
                 mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
+
+                if (mortgage.MortgageAmount > 0) // if its changed
+                    mortgage.IsApproved = true;
 
                 await _mortgageCommand.UpdateMortgageAsync(mortgage);
             }

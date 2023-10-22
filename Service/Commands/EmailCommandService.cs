@@ -23,7 +23,7 @@ namespace Service.Commands
 
         public async Task SendEmailsAsync()
         {
-            var mortgages = await _mortgageQuery.GetActiveMortgagesOfYesterday();
+            var mortgages = await _mortgageQuery.GetApprovedMortgagesOfYesterday();
 
             foreach (var mortgage in mortgages)
             {

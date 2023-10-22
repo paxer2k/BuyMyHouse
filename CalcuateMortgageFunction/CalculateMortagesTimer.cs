@@ -16,7 +16,7 @@ namespace CalcuateMortgageFunction
         }
 
         [Function("CalculateMortgagesTimer")]
-        public async Task Run([TimerTrigger("0 23 * * *")] MyInfo myInfo) // at 11PM every day (so there is at least an hour to process everything before midnight)
+        public async Task Run([TimerTrigger("0 0 * * *")] MyInfo myInfo) // perform calculations at midnight so that no one can be quick and dirty at the end of the day
         {
             try
             {

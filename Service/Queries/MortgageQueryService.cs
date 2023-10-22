@@ -61,16 +61,24 @@ namespace Service.Queries
             return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= today && m.CreatedAt < tomorrow);
         }
 
-        /// <summary>
-        /// Method that gets mortgages of yesterday (this is for sending email on next day)
-        /// </summary>
-        /// <returns></returns>
         public async Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterday()
         {
             DateTime today = DateTime.Today;
             DateTime yesterday = today.AddDays(-1);
 
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && !m.IsApproved);
+        }
+
+        /// <summary>
+        /// Method that gets mortgages of yesterday (this is for sending email on next day)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetApprovedMortgagesOfYesterday()
+        {
+            DateTime today = DateTime.Today;
+            DateTime yesterday = today.AddDays(-1);
+
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && m.IsApproved);
         }
     }
 }

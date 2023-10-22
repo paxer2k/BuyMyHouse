@@ -10,5 +10,6 @@ namespace Service.Queries.Interfaces
         Task<MortgageResponseDTO> GetMortgageByIdAsync(Guid id);
         Task<IEnumerable<Mortgage>> GetMortgagesOfToday();
         Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterday();
+        Task<IEnumerable<Mortgage>> GetApprovedMortgagesOfYesterday();
     }
 }

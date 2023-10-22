@@ -5,6 +5,8 @@ using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
 using Service.Queries.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Metadata;
 
 namespace Service.Queries
 {
@@ -61,24 +63,36 @@ namespace Service.Queries
             return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= today && m.CreatedAt < tomorrow);
         }
 
-        public async Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterday()
-        {
-            DateTime today = DateTime.Today;
-            DateTime yesterday = today.AddDays(-1);
 
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && !m.IsApproved);
+        /// <summary>
+        /// Method that retrieved non-approved mortgages of yesterday (for calculation)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterdayAsync()
+        {
+            return await GetMortgagesOfYesterdayByApprovalAsync(false);
         }
 
         /// <summary>
-        /// Method that gets mortgages of yesterday (this is for sending email on next day)
+        /// Method that retrieves approved mortgages of yesterday (for email sending)
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Mortgage>> GetApprovedMortgagesOfYesterday()
+        public async Task<IEnumerable<Mortgage>> GetApprovedMortgagesOfYesterdayAsync()
+        {
+            return await GetMortgagesOfYesterdayByApprovalAsync(true);
+        }
+
+        /// <summary>
+        /// Private method that filters mortgages of yesterday by the approved status
+        /// </summary>
+        /// <param name="isApproved"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<Mortgage>> GetMortgagesOfYesterdayByApprovalAsync(bool isApproved)
         {
             DateTime today = DateTime.Today;
             DateTime yesterday = today.AddDays(-1);
 
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && m.IsApproved);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && m.IsApproved == isApproved);
         }
     }
 }

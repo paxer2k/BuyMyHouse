@@ -18,7 +18,7 @@ namespace Service.Commands
         }
         public async Task CalculateMortgagesAsync()
         {
-            var activeMortgagesOfYesterday = await _mortgageQuery.GetActiveMortgagesOfYesterday();
+            var activeMortgagesOfYesterday = await _mortgageQuery.GetActiveMortgagesOfYesterdayAsync();
 
             await CalculateAllMortgagesAsync(activeMortgagesOfYesterday);
         }

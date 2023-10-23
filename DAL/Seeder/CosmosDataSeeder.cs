@@ -33,7 +33,7 @@ namespace DAL.Seeder
                     LastName = "Smith",
                     Email = "jane@example.com",
                     AnualIncome = 80000,
-                    DateOfBirth = "1988-7-20"/*.ToString("yyyy-MM-dd")*/
+                    DateOfBirth = "1988-7-20"
                 };
 
                 var customer3 = new Customer
@@ -42,16 +42,16 @@ namespace DAL.Seeder
                     LastName = "Johnson",
                     Email = "alice@example.com",
                     AnualIncome = 90000,
-                    DateOfBirth = "1990-5-10"/*.ToString("yyyy-MM-dd")*/
+                    DateOfBirth = "1990-5-10"
                 };
 
                 var customer4 = new Customer
                 {
                     FirstName = "Alex",
                     LastName = "Arkhipov",
-                    Email = "alex.arkhipov867@gmail.com",
+                    Email = "647833@student.inholland.nl",
                     AnualIncome = 85000,
-                    DateOfBirth = "1987-9-25"/*.ToString("yyyy-MM-dd")*/
+                    DateOfBirth = "1987-9-25"
                 };
 
                 var mortgage1 = new Mortgage();

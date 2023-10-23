@@ -3,8 +3,8 @@ This is an assignment for the Cloud Databases course. This assignment entails ma
 How the application works:
 1. You have to sign-up for a mortgage as one or two customers. No more, no less. If you have two customers, the anual income will be shared between the two people. This is done through the POST endpoint in the mortgages.
 2. As a customer, you can only have one mortgage application active at a time.
-3. When the mortgage application is sent, it will be processed along with all of the other application that were sent that on at 11PM.
-4. In the morning, at around 7AM an email will be sent to all the customers who applied for a mortgage where they can view their mortgages (through a localhost endpoint)
+3. When the mortgage application is sent, it will be processed along with all of the other application that were sent that on at 12AM. This is to avoid people sending their application before the day ends.
+4. In the morning, at around 7AM an email will be sent to all the customers who applied for a mortgage (the day before that and for whom the mortgages was calculated) where they can view their mortgages (through a localhost endpoint)
 
 Additional points:
 1. This application contains a data seeder which will populate the Cosmos DB with 4 random users and 3 mortgage applications.

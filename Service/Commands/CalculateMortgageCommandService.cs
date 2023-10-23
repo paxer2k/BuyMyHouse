@@ -31,8 +31,7 @@ namespace Service.Commands
 
                 mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
 
-                if (mortgage.MortgageAmount > 0) // if its changed
-                    mortgage.IsApproved = true;
+                mortgage.IsApproved = true;
 
                 await _mortgageCommand.UpdateMortgageAsync(mortgage);
             }

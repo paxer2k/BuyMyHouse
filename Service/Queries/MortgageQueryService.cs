@@ -5,8 +5,6 @@ using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
 using Service.Queries.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection.Metadata;
 
 namespace Service.Queries
 {
@@ -50,19 +48,6 @@ namespace Service.Queries
 
             return _mapper.Map<MortgageResponseDTO>(mortgage);
         }
-
-        /// <summary>
-        /// Method that gets mortgages of today (this is for calculation of the total mortgages (this is for the current day))
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Mortgage>> GetMortgagesOfToday()
-        {
-            DateTime today = DateTime.Today;
-            DateTime tomorrow = today.AddDays(1);
-
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= today && m.CreatedAt < tomorrow);
-        }
-
 
         /// <summary>
         /// Method that retrieved non-approved mortgages of yesterday (for calculation)

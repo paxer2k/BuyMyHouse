@@ -34,9 +34,7 @@ namespace Service.Commands
                 }
 
                 // update mortgage expiry date after sending mail because otherwise this will be done twice (if there are two customers)
-                mortgage.ExpiresAt = DateTime.Now.AddDays(1);
-                mortgage.IsEmailSent = true;
-                await _mortgageCommand.UpdateMortgageAsync(mortgage);
+                await UpdateMortgageInformationAsync(mortgage);
             }
         }
 
@@ -52,6 +50,13 @@ namespace Service.Commands
             var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
             await _sendGridMailerCommandService.SendEmailAsync(message);
+        }
+
+        private async Task UpdateMortgageInformationAsync(Mortgage mortgage)
+        {
+            mortgage.ExpiresAt = DateTime.Now.AddDays(1);
+            mortgage.IsEmailSent = true;
+            await _mortgageCommand.UpdateMortgageAsync(mortgage);
         }
     }
 }

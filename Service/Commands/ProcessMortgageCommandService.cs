@@ -47,9 +47,7 @@ namespace Service.Commands
 
         private int CalculateAge(string birthDate)
         {
-            DateTime birthdate;
-            if (!DateTime.TryParseExact(birthDate, "yyyy-MM-dd", null, DateTimeStyles.None, out birthdate))
-                throw new ArgumentException("Invalid birthdate format. Please use 'yyyy-MM-dd'.");
+            DateTime birthdate = DateTime.Parse(birthDate);
 
             DateTime currentDate = DateTime.Today;
             int age = currentDate.Year - birthdate.Year;

@@ -5,18 +5,17 @@ using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Service.Commands.Interfaces;
 using Service.Exceptions;
+using System.Globalization;
 
 namespace Service.Commands
 {
     public class MortgageCommandService : IMortgageCommandService
     {
         private readonly ICommandRepository<Mortgage> _mortgageCommandRepository;
-        private readonly IAppConfiguration _appConfiguration;
         private readonly IMapper _mapper;
-        public MortgageCommandService(ICommandRepository<Mortgage> mortgageCommandRepository, IAppConfiguration appConfiguration, IMapper mapper)
+        public MortgageCommandService(ICommandRepository<Mortgage> mortgageCommandRepository, IMapper mapper)
         {
             _mortgageCommandRepository = mortgageCommandRepository;
-            _appConfiguration = appConfiguration;
             _mapper = mapper;
         }
 
@@ -87,7 +86,11 @@ namespace Service.Commands
                 throw new BadImageFormatException("The email is mandatory to fill out.");
 
             if (string.IsNullOrEmpty(customerDTO.DateOfBirth))
-                throw new BadImageFormatException("Your date of birth is required to be filled out");           
+                throw new BadImageFormatException("Your date of birth is required to be filled out");
+
+            DateTime birthDate;
+            if (!DateTime.TryParseExact(customerDTO.DateOfBirth, "yyyy-MM-dd", null, DateTimeStyles.None, out birthDate))
+                throw new ArgumentException("Invalid birthdate format. Please use 'yyyy-MM-dd'.");
         }  
     }
 }

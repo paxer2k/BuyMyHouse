@@ -17,6 +17,7 @@ var host = new HostBuilder()
         services.AddDbContext<BuyMyHouseContext>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();
+        services.AddScoped<IProcessMortgageCommandService, ProcessMortgageCommandService>();
         services.AddScoped<IMortgageCommandService, MortgageCommandService>();
         services.AddScoped<IMortgageQueryService, MortgageQueryService>();
         services.AddScoped<IMortgageCommandService, MortgageCommandService>();

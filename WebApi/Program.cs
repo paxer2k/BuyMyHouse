@@ -44,6 +44,7 @@ builder.Services.AddScoped<ICosmosDataSeeder, CosmosDataSeeder>();
 builder.Services.AddScoped<IMortgageQueryService, MortgageQueryService>();
 builder.Services.AddScoped<IMortgageCommandService, MortgageCommandService>();
 builder.Services.AddScoped<ICalculateMortgageCommandService, CalculateMortgageCommandService>();
+builder.Services.AddScoped<IProcessMortgageCommandService, ProcessMortgageCommandService>();
 builder.Services.AddScoped<IEmailCommandService, EmailCommandService>();
 
 var app = builder.Build();

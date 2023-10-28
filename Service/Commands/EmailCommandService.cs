@@ -3,6 +3,7 @@ using Domain.Configuration.Interfaces;
 using SendGrid.Helpers.Mail;
 using Service.Commands.Interfaces;
 using Service.Queries.Interfaces;
+using Domain.Enums;
 
 namespace Service.Commands
 {
@@ -23,22 +24,23 @@ namespace Service.Commands
 
         public async Task SendEmailsAsync()
         {
-            var mortgages = await _mortgageQuery.GetApprovedMortgagesOfYesterdayAsync();
+            var finishedMortgages = await _mortgageQuery.GetFinishedMortgages();
 
-            foreach (var mortgage in mortgages)
+            foreach (var mortgage in finishedMortgages)
             {
                 foreach (var customer in mortgage.Customers)
                 {
-                    await SendMortgageOfferEmailAsync(customer, mortgage);
+                    await SendEmailAsync(customer, mortgage);
                 }
 
                 // update mortgage expiry date after sending mail because otherwise this will be done twice (if there are two customers)
                 mortgage.ExpiresAt = DateTime.Now.AddDays(1);
+                mortgage.IsEmailSent = true;
                 await _mortgageCommand.UpdateMortgageAsync(mortgage);
             }
         }
 
-        private async Task SendMortgageOfferEmailAsync(Customer customer, Mortgage activeMortgage)
+        private async Task SendEmailAsync(Customer customer, Mortgage activeMortgage)
         {
             var from = new EmailAddress(_appConfiguration.SendGridConfig.Sender, "BuyMyHouse");
             var subject = "BuyMyHouse.co | Your mortgage application";

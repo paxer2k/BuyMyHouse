@@ -5,7 +5,6 @@ using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Service.Commands.Interfaces;
 using Service.Exceptions;
-using System.Globalization;
 
 namespace Service.Commands
 {
@@ -88,30 +87,7 @@ namespace Service.Commands
                 throw new BadImageFormatException("The email is mandatory to fill out.");
 
             if (string.IsNullOrEmpty(customerDTO.DateOfBirth))
-                throw new BadImageFormatException("Your date of birth is required to be filled out");
-
-            if (CalculateAge(customerDTO.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
-                throw new BadRequestException("Sorry, but you are not eligeable for a mortage as it is 18+ only.");
-
-            if (customerDTO.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
-                throw new BadRequestException($"Sorry, you need to earn at least ${_appConfiguration.BusinessLogicConfig.MIN_INCOME} per year in order to sign up for a mortgage");
-        }
-
-        private int CalculateAge(string birthDate)
-        {
-            DateTime birthdate;
-            if (!DateTime.TryParseExact(birthDate, "yyyy-MM-dd", null, DateTimeStyles.None, out birthdate))
-                throw new ArgumentException("Invalid birthdate format. Please use 'yyyy-MM-dd'.");
-
-            DateTime currentDate = DateTime.Today;
-            int age = currentDate.Year - birthdate.Year;
-
-            // Check if the birthday for this year has already occurred or not
-            if (birthdate.Date > currentDate.AddYears(-age))
-                age--;
-
-            return age;
-
-        }
+                throw new BadImageFormatException("Your date of birth is required to be filled out");           
+        }  
     }
 }

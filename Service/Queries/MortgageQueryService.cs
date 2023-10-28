@@ -5,6 +5,7 @@ using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
 using Service.Queries.Interfaces;
+using Domain.Enums;
 
 namespace Service.Queries
 {
@@ -49,35 +50,14 @@ namespace Service.Queries
             return _mapper.Map<MortgageResponseDTO>(mortgage);
         }
 
-        /// <summary>
-        /// Method that retrieved non-approved mortgages of yesterday (for calculation)
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Mortgage>> GetActiveMortgagesOfYesterdayAsync()
+        public async Task<IEnumerable<Mortgage>> GetMortgagesByStatusAsync(ApplicationStatus applicationStatus)
         {
-            return await GetMortgagesOfYesterdayByApprovalAsync(false);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.ApplicationStatus == applicationStatus);
         }
 
-        /// <summary>
-        /// Method that retrieves approved mortgages of yesterday (for email sending)
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Mortgage>> GetApprovedMortgagesOfYesterdayAsync()
+        public async Task<IEnumerable<Mortgage>> GetFinishedMortgages()
         {
-            return await GetMortgagesOfYesterdayByApprovalAsync(true);
-        }
-
-        /// <summary>
-        /// Private method that filters mortgages of yesterday by the approved status
-        /// </summary>
-        /// <param name="isApproved"></param>
-        /// <returns></returns>
-        private async Task<IEnumerable<Mortgage>> GetMortgagesOfYesterdayByApprovalAsync(bool isApproved)
-        {
-            DateTime today = DateTime.Today;
-            DateTime yesterday = today.AddDays(-1);
-
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.CreatedAt >= yesterday && m.CreatedAt < today && m.IsApproved == isApproved);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => (m.ApplicationStatus == ApplicationStatus.Declined || m.ApplicationStatus == ApplicationStatus.Approved) && !m.IsEmailSent);
         }
     }
 }

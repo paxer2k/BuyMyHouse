@@ -2,6 +2,7 @@
 using Domain.Configuration.Interfaces;
 using Service.Commands.Interfaces;
 using Service.Queries.Interfaces;
+using Domain.Enums;
 
 namespace Service.Commands
 {
@@ -18,23 +19,23 @@ namespace Service.Commands
         }
         public async Task CalculateMortgagesAsync()
         {
-            var activeMortgagesOfYesterday = await _mortgageQuery.GetActiveMortgagesOfYesterdayAsync();
+            var activeMortgages = await _mortgageQuery.GetMortgagesByStatusAsync(ApplicationStatus.Active);
 
-            await CalculateAllMortgagesAsync(activeMortgagesOfYesterday);
+            foreach (var mortgage in activeMortgages)
+            {
+                await CalculateMortgageAsync(mortgage);
+            }
         }
 
-        private async Task CalculateAllMortgagesAsync(IEnumerable<Mortgage> activeMortgagesOfYesterday)
+        private async Task CalculateMortgageAsync(Mortgage mortgage)
         {
-            foreach (var mortgage in activeMortgagesOfYesterday)
-            {
-                var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
+            var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
 
-                mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
+            mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
 
-                mortgage.IsApproved = true;
+            mortgage.ApplicationStatus = ApplicationStatus.Processed;
 
-                await _mortgageCommand.UpdateMortgageAsync(mortgage);
-            }
+            await _mortgageCommand.UpdateMortgageAsync(mortgage);
         }
     }
 }

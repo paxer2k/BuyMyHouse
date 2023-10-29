@@ -33,7 +33,7 @@ namespace Service.Commands
 
             mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
 
-            mortgage.ApplicationStatus = ApplicationStatus.Processed;
+            mortgage.ApplicationStatus = ApplicationStatus.Calculated;
 
             await _mortgageCommand.UpdateMortgageAsync(mortgage);
         }

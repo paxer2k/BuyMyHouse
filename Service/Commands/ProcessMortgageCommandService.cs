@@ -20,9 +20,9 @@ namespace Service.Commands
         }
         public async Task ProcessMortgagesAsync()
         {
-            var processedMortgages = await _mortgageQueryService.GetMortgagesByStatusAsync(ApplicationStatus.Processed);
+            var calculatedMortgages = await _mortgageQueryService.GetMortgagesByStatusAsync(ApplicationStatus.Calculated);
 
-            foreach(var mortgage in processedMortgages)
+            foreach(var mortgage in calculatedMortgages)
             {
                 await ProcessMortgageAsync(mortgage);
             }

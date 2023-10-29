@@ -9,7 +9,7 @@ namespace Service.Queries.Interfaces
     {
         Task<GenericOverview<MortgageResponseDTO>> GetAllMortgagesAsync(int startIndex = 0, int endIndex = 9);
         Task<MortgageResponseDTO> GetMortgageByIdAsync(Guid id);
-        Task<IEnumerable<Mortgage>> GetMortgagesByStatusAsync(ApplicationStatus applicationStatus);
-        Task<IEnumerable<Mortgage>> GetFinishedMortgages();
+        Task<IEnumerable<Mortgage>> GetMortgagesByStatusAsync(MortgageStatus mortgageStatus);
+        Task<IEnumerable<Mortgage>> GetProcessedMortgages();
     }
 }

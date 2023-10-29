@@ -20,7 +20,7 @@ namespace SendEmailsTimer
         {
             try
             {
-                _logger.LogInformation("Sending mails to all customers");
+                _logger.LogInformation($"Sending email to all customers of processed mortgages: {DateTime.Now}");
                 await _emailCommandService.SendEmailsAsync();
             }
             catch (Exception ex)

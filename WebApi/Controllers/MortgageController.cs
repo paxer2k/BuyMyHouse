@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<GenericOverview<Mortgage>>> GetMortgageApplications(int startIndex = 0, int endIndex = 9)
+        public async Task<ActionResult<GenericOverview<MortgageResponseDTO>>> GetMortgageApplications(int startIndex = 0, int endIndex = 9)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Mortgage>> GetMortgageApplicationById(Guid id)
+        public async Task<ActionResult<MortgageResponseDTO>> GetMortgageApplicationById(Guid id)
         {
             try
             {

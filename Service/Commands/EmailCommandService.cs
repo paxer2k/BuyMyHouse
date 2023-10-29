@@ -9,24 +9,24 @@ namespace Service.Commands
 {
     public class EmailCommandService : IEmailCommandService
     {
-        private readonly IMortgageQueryService _mortgageQuery;
-        private readonly IMortgageCommandService _mortgageCommand;
+        private readonly IMortgageQueryService _mortgageQueryService;
+        private readonly IMortgageCommandService _mortgageCommandService;
         private readonly IAppConfiguration _appConfiguration;
         private readonly ISendGridMailerCommandService _sendGridMailerCommandService;
 
-        public EmailCommandService(IMortgageQueryService mortgageQuery, IMortgageCommandService mortgageCommand, IAppConfiguration appConfiguration, ISendGridMailerCommandService sendGridMailerCommandService)
+        public EmailCommandService(IMortgageQueryService mortgageQueryService, IMortgageCommandService mortgageCommandService, IAppConfiguration appConfiguration, ISendGridMailerCommandService sendGridMailerCommandService)
         {
-            _mortgageQuery = mortgageQuery;
-            _mortgageCommand = mortgageCommand;
+            _mortgageQueryService = mortgageQueryService;
+            _mortgageCommandService = mortgageCommandService;
             _appConfiguration = appConfiguration;
             _sendGridMailerCommandService = sendGridMailerCommandService;
         }
 
         public async Task SendEmailsAsync()
         {
-            var finishedMortgages = await _mortgageQuery.GetFinishedMortgages();
+            var processedMortgages = await _mortgageQueryService.GetProcessedMortgages();
 
-            foreach (var mortgage in finishedMortgages)
+            foreach (var mortgage in processedMortgages)
             {
                 foreach (var customer in mortgage.Customers)
                 {
@@ -41,20 +41,20 @@ namespace Service.Commands
         private async Task SendEmailAsync(Customer customer, Mortgage mortgage)
         {
             var from = new EmailAddress(_appConfiguration.SendGridConfig.Sender, "BuyMyHouse.co");
-            var subject = $"Your mortgage has been {mortgage.ApplicationStatus.ToString().ToUpper()}";
+            var subject = $"Your mortgage has been {mortgage.MortgageStatus.ToString().ToUpper()}";
             var to = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
 
             string plainTextContent = "";
             string htmlContent = "";
 
-            if (mortgage.ApplicationStatus == ApplicationStatus.Declined)
+            if (mortgage.MortgageStatus == MortgageStatus.Declined)
             {
                  htmlContent = $"<div><strong>If you would like to know the reason behind your application getting declined, please use the contact information below:</strong><br>" +
-                    $"<p>Contact email: alex.arkhipov.testmail@gmail.com</p><br>" +
+                    $"<p>Contact email: alex.arkhipov.testmail@gmail.com</p>" +
                     $"<p>Contact phone: 068432842</div>";
             }
 
-            if (mortgage.ApplicationStatus == ApplicationStatus.Approved)
+            if (mortgage.MortgageStatus == MortgageStatus.Approved)
             {
                 plainTextContent = "Hereby your mortgage offer:";
                 htmlContent = $"<div><strong>For details please visit the link below link</strong><br>" +
@@ -70,7 +70,7 @@ namespace Service.Commands
         {
             mortgage.ExpiresAt = DateTime.Now.AddDays(1);
             mortgage.IsEmailSent = true;
-            await _mortgageCommand.UpdateMortgageAsync(mortgage);
+            await _mortgageCommandService.UpdateMortgageAsync(mortgage);
         }
     }
 }

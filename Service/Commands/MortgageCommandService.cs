@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DAL.Repository.Interfaces;
 using Domain;
-using Domain.Configuration.Interfaces;
 using Domain.DTOs;
 using Service.Commands.Interfaces;
 using Service.Exceptions;
@@ -80,13 +79,16 @@ namespace Service.Commands
         private void ValidateCustomerDTO(CustomerDTO customerDTO)
         {
             if (string.IsNullOrEmpty(customerDTO.FirstName) || string.IsNullOrEmpty(customerDTO.LastName))
-                throw new BadImageFormatException("First name and last name are mandatory to fill out.");
+                throw new BadRequestException("First name and last name are mandatory to fill out.");
 
             if (string.IsNullOrEmpty(customerDTO.Email))
-                throw new BadImageFormatException("The email is mandatory to fill out.");
+                throw new BadRequestException("The email is mandatory to fill out.");
 
             if (string.IsNullOrEmpty(customerDTO.DateOfBirth))
-                throw new BadImageFormatException("Your date of birth is required to be filled out");
+                throw new BadRequestException("Your date of birth is required to be filled out");
+
+            if (customerDTO.AnualIncome <= 0)
+                throw new BadRequestException("Entering you anual income in mandatory.");
 
             DateTime birthDate;
             if (!DateTime.TryParseExact(customerDTO.DateOfBirth, "yyyy-MM-dd", null, DateTimeStyles.None, out birthDate))

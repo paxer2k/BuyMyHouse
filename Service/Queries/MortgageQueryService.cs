@@ -41,7 +41,7 @@ namespace Service.Queries
         {
             var mortgage = await _mortgageQueryRepository.GetByConditionAsync(m => m.Id == id);
 
-            if (mortgage is null)
+            if (mortgage == null)
                 throw new BadRequestException($"The mortgage with id {id} does not exist!");
 
             if (mortgage.ExpiresAt < DateTime.Now)
@@ -50,14 +50,23 @@ namespace Service.Queries
             return _mapper.Map<MortgageResponseDTO>(mortgage);
         }
 
-        public async Task<IEnumerable<Mortgage>> GetMortgagesByStatusAsync(ApplicationStatus applicationStatus)
+        /// <summary>
+        /// Method for retrieving mortgages based on their status
+        /// </summary>
+        /// <param name="mortgageStatus"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetMortgagesByStatusAsync(MortgageStatus mortgageStatus)
         {
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.ApplicationStatus == applicationStatus);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => m.MortgageStatus == mortgageStatus);
         }
 
-        public async Task<IEnumerable<Mortgage>> GetFinishedMortgages()
+        /// <summary>
+        /// Method for getting all the mortgages which are either Approved or Declined and for those that email has not been sent yet.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Mortgage>> GetProcessedMortgages()
         {
-            return await _mortgageQueryRepository.GetAllByConditionAsync(m => (m.ApplicationStatus == ApplicationStatus.Declined || m.ApplicationStatus == ApplicationStatus.Approved) && !m.IsEmailSent);
+            return await _mortgageQueryRepository.GetAllByConditionAsync(m => (m.MortgageStatus == MortgageStatus.Declined || m.MortgageStatus == MortgageStatus.Approved) && !m.IsEmailSent);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Service.Commands
         }
         public async Task ProcessMortgagesAsync()
         {
-            var calculatedMortgages = await _mortgageQueryService.GetMortgagesByStatusAsync(ApplicationStatus.Calculated);
+            var calculatedMortgages = await _mortgageQueryService.GetMortgagesByStatusAsync(MortgageStatus.Calculated);
 
             foreach(var mortgage in calculatedMortgages)
             {
@@ -30,15 +30,18 @@ namespace Service.Commands
 
         private async Task ProcessMortgageAsync(Mortgage mortgage)
         {
-            var ageBelowMinimum = mortgage.Customers.Select(c => CalculateAge(c.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE).Any();
+            var ageBelowMinimum = mortgage.Customers
+                .Select(c => CalculateAge(c.DateOfBirth))
+                .Any(age => age < _appConfiguration.BusinessLogicConfig.MIN_AGE);
+
             var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
 
             if (totalIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
-                mortgage.ApplicationStatus = ApplicationStatus.Declined;
+                mortgage.MortgageStatus = MortgageStatus.Declined;
             else if (ageBelowMinimum)
-                mortgage.ApplicationStatus = ApplicationStatus.Declined;
+                mortgage.MortgageStatus = MortgageStatus.Declined;
             else
-                mortgage.ApplicationStatus = ApplicationStatus.Approved;
+                mortgage.MortgageStatus = MortgageStatus.Approved;
 
             await _mortgageCommandService.UpdateMortgageAsync(mortgage);
         }

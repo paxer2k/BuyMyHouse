@@ -24,7 +24,7 @@ namespace Domain
         /// Date to track expiry date for the mortgage 
         /// </summary>
         public DateTime ExpiresAt { get; set; }
-        public ApplicationStatus ApplicationStatus { get; set; } = ApplicationStatus.Active;
+        public MortgageStatus MortgageStatus { get; set; } = MortgageStatus.Active;
         public bool IsEmailSent { get; set; } = false;
     }
 }

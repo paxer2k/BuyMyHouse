@@ -23,7 +23,6 @@ namespace ProcessMortgagesTimer
             try
             {
                 _logger.LogInformation($"Processing mortgages of today: {DateTime.Now}");
-                _logger.LogInformation($"Next process schedule at: {myInfo.ScheduleStatus.Next}");
 
                 await _calculateMortgageCommandService.CalculateMortgagesAsync();
 

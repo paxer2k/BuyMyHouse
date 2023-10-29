@@ -19,7 +19,7 @@ namespace Service.Commands
         }
         public async Task CalculateMortgagesAsync()
         {
-            var activeMortgages = await _mortgageQuery.GetMortgagesByStatusAsync(ApplicationStatus.Active);
+            var activeMortgages = await _mortgageQuery.GetMortgagesByStatusAsync(MortgageStatus.Active);
 
             foreach (var mortgage in activeMortgages)
             {
@@ -33,7 +33,7 @@ namespace Service.Commands
 
             mortgage.MortgageAmount += (totalIncome * _appConfiguration.BusinessLogicConfig.INTEREST_RATE);
 
-            mortgage.ApplicationStatus = ApplicationStatus.Calculated;
+            mortgage.MortgageStatus = MortgageStatus.Calculated;
 
             await _mortgageCommand.UpdateMortgageAsync(mortgage);
         }

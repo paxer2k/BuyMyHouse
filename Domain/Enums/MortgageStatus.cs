@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums
 {
-    public enum ApplicationStatus
+    public enum MortgageStatus
     {
         Active, Calculated, Declined, Approved
     }

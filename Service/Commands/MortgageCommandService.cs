@@ -90,8 +90,7 @@ namespace Service.Commands
             if (customerDTO.AnualIncome <= 0)
                 throw new BadRequestException("Entering you anual income in mandatory.");
 
-            DateTime birthDate;
-            if (!DateTime.TryParseExact(customerDTO.DateOfBirth, "yyyy-MM-dd", null, DateTimeStyles.None, out birthDate))
+            if (!DateTime.TryParseExact(customerDTO.DateOfBirth, "yyyy-MM-dd", null, DateTimeStyles.None, out _))
                 throw new ArgumentException("Invalid birthdate format. Please use 'yyyy-MM-dd'.");
         }  
     }

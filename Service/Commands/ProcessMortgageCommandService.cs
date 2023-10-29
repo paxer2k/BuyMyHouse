@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Configuration.Interfaces;
+﻿using Domain.Configuration.Interfaces;
+using Domain.Entities;
 using Domain.Enums;
 using Service.Commands.Interfaces;
 using Service.Queries.Interfaces;

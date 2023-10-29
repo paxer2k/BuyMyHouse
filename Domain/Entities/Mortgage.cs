@@ -1,7 +1,6 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using Domain.Enums;
 
-namespace Domain
+namespace Domain.Entities
 {
     public class Mortgage : BaseEntity
     {
@@ -18,7 +17,7 @@ namespace Domain
         /// <summary>
         /// Date to track when the mortgage was created
         /// </summary>
-        public DateTime CreatedAt { get; internal set; } = DateTime.Now; // DO NOT MAKE PRIVATE DBSET DOESNT LIKE THAT
+        public DateTime CreatedAt { get; set; } = DateTime.Now; // DO NOT MAKE PRIVATE DBSET DOESNT LIKE THAT
 
         /// <summary>
         /// Date to track expiry date for the mortgage 

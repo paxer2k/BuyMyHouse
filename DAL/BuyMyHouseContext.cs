@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Configuration.Interfaces;
+﻿using Domain.Configuration.Interfaces;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL

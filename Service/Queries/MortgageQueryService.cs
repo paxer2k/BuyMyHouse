@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DAL.Repository.Interfaces;
-using Domain;
 using Domain.DTOs;
 using Domain.Overview;
 using Service.Exceptions;
 using Service.Queries.Interfaces;
 using Domain.Enums;
+using Domain.Entities;
 
 namespace Service.Queries
 {

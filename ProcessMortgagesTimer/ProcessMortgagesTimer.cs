@@ -18,7 +18,7 @@ namespace ProcessMortgagesTimer
         }
 
         [Function("ProcessMortgagesTimer")]
-        public async Task Run([TimerTrigger("0 0 0 * *")] MyInfo myInfo) // perform calculations at & processing at midnight so that no one can be quick and dirty at the end of the day
+        public async Task Run([TimerTrigger("0 0 * * *")] MyInfo myInfo) // perform calculations at & processing at midnight so that no one can be quick and dirty at the end of the day
         {
             try
             {

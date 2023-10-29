@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.DTOs;
+﻿using Domain.DTOs;
+using Domain.Entities;
 
 namespace Service.Commands.Interfaces
 {

@@ -1,9 +1,9 @@
-﻿using Domain;
-using Domain.Configuration.Interfaces;
+﻿using Domain.Configuration.Interfaces;
 using SendGrid.Helpers.Mail;
 using Service.Commands.Interfaces;
 using Service.Queries.Interfaces;
 using Domain.Enums;
+using Domain.Entities;
 
 namespace Service.Commands
 {

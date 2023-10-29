@@ -1,6 +1,6 @@
 ﻿using DAL.Repository.Interfaces;
 using DAL.Seeder.Interfaces;
-using Domain;
+using Domain.Entities;
 
 namespace DAL.Seeder
 {

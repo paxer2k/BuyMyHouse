@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DAL.Repository.Interfaces;
-using Domain;
 using Domain.DTOs;
+using Domain.Entities;
 using Service.Commands.Interfaces;
 using Service.Exceptions;
 using System.Globalization;

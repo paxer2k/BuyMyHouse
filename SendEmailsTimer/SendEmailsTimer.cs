@@ -16,7 +16,7 @@ namespace SendEmailsTimer
         }
 
         [Function("SendEmailTimer")]
-        public async Task Run([TimerTrigger("* * * * * *")] MyInfo myInfo) // 7AM everyday send an email
+        public async Task Run([TimerTrigger("0 7 * * *")] MyInfo myInfo) // 7AM everyday send an email
         {
             try
             {

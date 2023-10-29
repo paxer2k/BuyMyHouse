@@ -41,7 +41,7 @@ namespace Service.Commands
         private async Task SendEmailAsync(Customer customer, Mortgage mortgage)
         {
             var from = new EmailAddress(_appConfiguration.SendGridConfig.Sender, "BuyMyHouse.co");
-            var subject = $"Your mortgage has been {mortgage.MortgageStatus.ToString().ToUpper()}";
+            var subject = $"Your mortgage application has been {mortgage.MortgageStatus.ToString().ToUpper()}";
             var to = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
 
             string plainTextContent = "";
@@ -58,7 +58,7 @@ namespace Service.Commands
             {
                 plainTextContent = "Hereby your mortgage offer:";
                 htmlContent = $"<div><strong>For details please visit the link below link</strong><br>" +
-                   $"<p>Through <a href=https://localhost:7217/mortgages/{mortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
+                   $"<p>Through <a href={_appConfiguration.SendGridConfig.MortgageApplicationEndpoint}{mortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
             }
 
             var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);

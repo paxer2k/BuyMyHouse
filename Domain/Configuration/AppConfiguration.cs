@@ -29,6 +29,7 @@ namespace Domain.Configuration
             {
                 SendGridApiKey = configuration.GetSection("SendGridConfig:SendGridApiKey").Value ?? "",
                 Sender = configuration.GetSection("SendGridConfig:Sender").Value ?? "",
+                MortgageApplicationEndpoint = configuration.GetSection("SendGridConfig:MortgageApplicationEndpoint").Value ?? ""
             };
         }
     }
@@ -51,5 +52,6 @@ namespace Domain.Configuration
     {
         public string SendGridApiKey { get; set; } = string.Empty;
         public string Sender { get; set; } = string.Empty;
+        public string MortgageApplicationEndpoint { get; set; } = string.Empty;
     }
 }

@@ -2,16 +2,16 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Service.Commands.Interfaces;
 
-namespace SendEmailFunction
+namespace SendEmailsTimer
 {
-    public class SendEmailTimer
+    public class SendEmailsTimer
     {
         private readonly ILogger _logger;
         private readonly IEmailCommandService _emailCommandService;
 
-        public SendEmailTimer(ILoggerFactory loggerFactory, IEmailCommandService emailCommandService)
+        public SendEmailsTimer(ILoggerFactory loggerFactory, IEmailCommandService emailCommandService)
         {
-            _logger = loggerFactory.CreateLogger<SendEmailTimer>();
+            _logger = loggerFactory.CreateLogger<SendEmailsTimer>();
             _emailCommandService = emailCommandService;
         }
 

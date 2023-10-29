@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessMortgagesTimer", "CalcuateMortgageFunction\ProcessMortgagesTimer.csproj", "{58DE3FEC-BFAB-4C4F-A0F6-30F52FB46EF9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailFunction", "SendEmailFunction\SendEmailFunction.csproj", "{69095A91-BFD7-4F18-90D9-0BF9FCC9584B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailsTimer", "SendEmailFunction\SendEmailsTimer.csproj", "{69095A91-BFD7-4F18-90D9-0BF9FCC9584B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

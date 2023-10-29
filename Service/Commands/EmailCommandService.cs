@@ -38,14 +38,28 @@ namespace Service.Commands
             }
         }
 
-        private async Task SendEmailAsync(Customer customer, Mortgage activeMortgage)
+        private async Task SendEmailAsync(Customer customer, Mortgage mortgage)
         {
-            var from = new EmailAddress(_appConfiguration.SendGridConfig.Sender, "BuyMyHouse");
-            var subject = "BuyMyHouse.co | Your mortgage application";
+            var from = new EmailAddress(_appConfiguration.SendGridConfig.Sender, "BuyMyHouse.co");
+            var subject = $"Your mortgage has been {mortgage.ApplicationStatus.ToString().ToUpper()}";
             var to = new EmailAddress(customer.Email, $"{customer.FirstName} {customer.LastName}");
-            var plainTextContent = "Hereby your mortgage offer:";
-            var htmlContent = $"<div><strong>Thank you for using BuyMyHouse!</strong><br>" +
-                $"<p>Through <a href=https://localhost:7217/mortgages/{activeMortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
+
+            string plainTextContent = "";
+            string htmlContent = "";
+
+            if (mortgage.ApplicationStatus == ApplicationStatus.Declined)
+            {
+                 htmlContent = $"<div><strong>If you would like to know the reason behind your application getting declined, please use the contact information below:</strong><br>" +
+                    $"<p>Contact email: alex.arkhipov.testmail@gmail.com</p><br>" +
+                    $"<p>Contact phone: 068432842</div>";
+            }
+
+            if (mortgage.ApplicationStatus == ApplicationStatus.Approved)
+            {
+                plainTextContent = "Hereby your mortgage offer:";
+                htmlContent = $"<div><strong>For details please visit the link below link</strong><br>" +
+                   $"<p>Through <a href=https://localhost:7217/mortgages/{mortgage.Id}>this link</a> you can view your personal mortgage offer.<br>The link will be available for 24 hours</p></div>";
+            }
 
             var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 

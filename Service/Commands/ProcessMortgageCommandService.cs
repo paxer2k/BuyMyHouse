@@ -3,7 +3,6 @@ using Domain.Configuration.Interfaces;
 using Domain.Enums;
 using Service.Commands.Interfaces;
 using Service.Queries.Interfaces;
-using System.Globalization;
 
 namespace Service.Commands
 {
@@ -21,27 +20,26 @@ namespace Service.Commands
         }
         public async Task ProcessMortgagesAsync()
         {
-            var processedApplications = await _mortgageQueryService.GetMortgagesByStatusAsync(ApplicationStatus.Processed);
+            var processedMortgages = await _mortgageQueryService.GetMortgagesByStatusAsync(ApplicationStatus.Processed);
 
-            foreach(var application in processedApplications)
+            foreach(var mortgage in processedMortgages)
             {
-                foreach(var customer in application.Customers)
-                {
-                    await ProcessMortgageAsync(application, customer);
-                }
+                await ProcessMortgageAsync(mortgage);
             }
         }
 
-        private async Task ProcessMortgageAsync(Mortgage mortgage, Customer customer)
+        private async Task ProcessMortgageAsync(Mortgage mortgage)
         {
-            if (CalculateAge(customer.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE)
-                mortgage.ApplicationStatus = ApplicationStatus.Declined;
+            var ageBelowMinimum = mortgage.Customers.Select(c => CalculateAge(c.DateOfBirth) < _appConfiguration.BusinessLogicConfig.MIN_AGE).Any();
+            var totalIncome = mortgage.Customers.Select(c => c.AnualIncome).Sum();
 
-            if (customer.AnualIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
+            if (totalIncome < _appConfiguration.BusinessLogicConfig.MIN_INCOME)
                 mortgage.ApplicationStatus = ApplicationStatus.Declined;
+            else if (ageBelowMinimum)
+                mortgage.ApplicationStatus = ApplicationStatus.Declined;
+            else
+                mortgage.ApplicationStatus = ApplicationStatus.Approved;
 
-            mortgage.ApplicationStatus = ApplicationStatus.Approved;        
-            
             await _mortgageCommandService.UpdateMortgageAsync(mortgage);
         }
 
